@@ -1,0 +1,26 @@
+10:00  29A-111 identified by camera, enters -> A1
+10:10  29B-222 camera confidence 60% -> manual entry -> A2
+10:15  M-1 enters -> B1
+10:20  VIP-1 reserves for 11:00 -> C1
+10:30  admin locks zone B -> 1 slot(s) blocked
+10:40  M-2 enters -> rejected (zone B locked)
+10:50  sensor scan -> ['missing_vehicle']
+11:20  VIP-1 no-show -> released ['C1']
+12:00  29A-111 exits, fee 20000 VND
+12:30  29B-222 lost ticket, fee 290000 VND
+13:00  M-1 exits, fee 9000 VND
+
+LOT Smart Parking  (4/6 free, revenue 319000)
+  FLOOR F1  (2/4 free, revenue 319000)
+    ZONE A  (2/2 free, revenue 310000)
+      [A1] Free 10m
+      [A2] Free 13m
+    ZONE B  (0/2 free, revenue 9000)
+      [B1] Blocked 25m
+      [B2] Blocked 28m
+  FLOOR F2  (2/2 free, revenue 0)
+    ZONE C  (2/2 free, revenue 0)
+      [C1] Free 50m
+      [C2] Free 53m
+
+Audit log: 16 records (alert_missing_vehicle, anpr_low_confidence, anpr_read, entry, entry_rejected, exit, lock, lost_ticket, manual_entry, payment, reserve, reserve_expired).

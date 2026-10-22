@@ -1,0 +1,132 @@
+\subsection{UC-01 -- Vehicle entry}
+\noindent\textbf{Actor:} Driver\quad\textbf{Traceability:} REQ-01; REQ-02; REQ-31.
+\par\textbf{Preconditions:} A matching slot is available; the lot is not evacuating.
+\par\textbf{Main flow:} Read and confirm the plate; select a reserved or nearest matching slot; issue a ticket and guidance; open and close the entry gate.
+\par\textbf{Alternative flows and exceptions:} Reject full lots, evacuation, and duplicate plates. Low confidence requires manual input.
+\par\textbf{Postconditions:} Ticket Active; slot Occupied; entry logged.
+\subsection{UC-02 -- Exit and payment}
+\noindent\textbf{Actor:} Driver\quad\textbf{Traceability:} REQ-03; REQ-04; REQ-26; REQ-31.
+\par\textbf{Preconditions:} An active ticket exists.
+\par\textbf{Main flow:} Scan the ticket; verify the plate; calculate and display the fee; take payment; close the ticket, release the slot, and operate the exit gate.
+\par\textbf{Alternative flows and exceptions:} Missing ticket invokes lost-ticket handling. Failed payment retains the ticket; permit retry or another method. A plate mismatch needs confirmation.
+\par\textbf{Postconditions:} Ticket Closed; slot Free or Blocked if locked; revenue recorded.
+\subsection{UC-03 -- Reserve a slot}
+\noindent\textbf{Actor:} Driver\quad\textbf{Traceability:} REQ-05.
+\par\textbf{Preconditions:} A matching slot exists; the central server is reachable.
+\par\textbf{Main flow:} Enter type, plate, and arrival time; find a slot; mark Reserved and confirm the hold.
+\par\textbf{Alternative flows and exceptions:} Reject if full. Release a no-show after the 15-minute hold when expiry is checked.
+\par\textbf{Postconditions:} Reservation recorded; slot unavailable to other vehicles.
+\subsection{UC-04 -- Locate a vehicle}
+\noindent\textbf{Actor:} Driver\quad\textbf{Traceability:} REQ-06.
+\par\textbf{Preconditions:} The vehicle has an active ticket in the lot.
+\par\textbf{Main flow:} Enter the plate; look up the ticket; return floor, zone, slot, and distance.
+\par\textbf{Alternative flows and exceptions:} If absent from active tickets, display vehicle not found.
+\par\textbf{Postconditions:} Location displayed without modifying data.
+\subsection{UC-05 -- Lock or unlock a zone}
+\noindent\textbf{Actor:} Administrator\quad\textbf{Traceability:} REQ-08; REQ-09; REQ-18.
+\par\textbf{Preconditions:} An administrator account exists; the lot is in a suitable mode.
+\par\textbf{Main flow:} Log in; select a floor/zone; lock or unlock; update Free/Blocked states and log the action.
+\par\textbf{Alternative flows and exceptions:} Deny insufficient privileges. Occupied slots remain until exit, then become Blocked if locked. Faulty slots remain blocked on unlock.
+\par\textbf{Postconditions:} The locked area cannot take new visitors; existing reservations follow the stated policy.
+\subsection{UC-06 -- Handle a lost ticket}
+\noindent\textbf{Actor:} Gate Attendant\quad\textbf{Traceability:} REQ-07.
+\par\textbf{Preconditions:} A driver reports a lost ticket and provides a plate.
+\par\textbf{Main flow:} Verify ownership; find the ticket; calculate the charge; close the ticket, release the slot, and log the incident.
+\par\textbf{Alternative flows and exceptions:} No record: escalate to the manager. No ownership proof: refuse exit and record the denial.
+\par\textbf{Postconditions:} Ticket Closed; charge and incident recorded; REQ-07 criteria still require completion.
+\subsection{UC-07 -- Recognize an entry plate}
+\noindent\textbf{Actor:} Driver / Entry Camera\quad\textbf{Traceability:} REQ-11; REQ-01.
+\par\textbf{Preconditions:} The vehicle is stopped at entry; recognition or manual input is available.
+\par\textbf{Main flow:} The simulated camera returns plate and confidence; accept at least 80\%; pass the confirmed plate to entry.
+\par\textbf{Alternative flows and exceptions:} Below 80\% or camera offline: request manual input and log the reason.
+\par\textbf{Postconditions:} A confirmed plate is available before ticket issuance.
+\subsection{UC-08 -- Assign the nearest slot}
+\noindent\textbf{Actor:} Driver\quad\textbf{Traceability:} REQ-12.
+\par\textbf{Preconditions:} A suitable slot is available.
+\par\textbf{Main flow:} Filter by type, state, and VIP eligibility; select minimum distance; break ties by tree order; display the route.
+\par\textbf{Alternative flows and exceptions:} Skip locked/full nearest zones; return no slot when suitable capacity is exhausted.
+\par\textbf{Postconditions:} A valid slot is selected for ticket issuance.
+\subsection{UC-09 -- Detect parking discrepancies}
+\noindent\textbf{Actor:} Gate Attendant / Slot Sensor\quad\textbf{Traceability:} REQ-13; REQ-14.
+\par\textbf{Preconditions:} Sensor readings and ticket data are available.
+\par\textbf{Main flow:} Read each slot; reconcile occupancy with tickets; alert and log; relocate a ticket if staff confirm the vehicle is in another slot.
+\par\textbf{Alternative flows and exceptions:} No heartbeat makes the slot Blocked. Stays over 24 hours trigger an overstay alert. An unticketed vehicle triggers an unauthorized-vehicle alert.
+\par\textbf{Postconditions:} Discrepancies recorded; faulty slots cannot receive new vehicles.
+\subsection{UC-10 -- Emergency evacuation}
+\noindent\textbf{Actor:} Administrator / Fire Alarm\quad\textbf{Traceability:} REQ-15; REQ-09.
+\par\textbf{Preconditions:} An administrator command or fire-alarm signal is received.
+\par\textbf{Main flow:} Open all barriers; stop tickets; cancel reservations and lock the lot; waive exit fees; let an administrator end and restore operation.
+\par\textbf{Alternative flows and exceptions:} Deny attendant requests to trigger through administration or to end evacuation. A fire alarm bypasses login.
+\par\textbf{Postconditions:} Barriers stay open during evacuation; completion restores Normal mode.
+\subsection{UC-11 -- Pay a dynamic fee}
+\noindent\textbf{Actor:} Driver\quad\textbf{Traceability:} REQ-16; REQ-17; REQ-27; REQ-28.
+\par\textbf{Preconditions:} An active ticket exists.
+\par\textbf{Main flow:} Split the stay into started hours; apply peak multipliers; cap each 24-hour block; apply the ticket surcharge; display and collect the fee.
+\par\textbf{Alternative flows and exceptions:} Grace-period or monthly/VIP stays waive parking. Without peak hours or surcharge, apply base pricing.
+\par\textbf{Postconditions:} The exit workflow records a fee consistent with the rules.
+\subsection{UC-12 -- Log in}
+\noindent\textbf{Actor:} Attendant / Manager / Administrator\quad\textbf{Traceability:} REQ-18; REQ-09.
+\par\textbf{Preconditions:} The account exists and is not locked.
+\par\textbf{Main flow:} Enter credentials; authenticate; return the role; establish the session and record the event.
+\par\textbf{Alternative flows and exceptions:} Wrong credentials increment the count; three consecutive failures lock the account; locked accounts cannot log in.
+\par\textbf{Postconditions:} A role is returned or access is denied.
+\subsection{UC-13 -- Cancel a reservation}
+\noindent\textbf{Actor:} Driver\quad\textbf{Traceability:} REQ-19; REQ-05.
+\par\textbf{Preconditions:} A reservation exists for the plate.
+\par\textbf{Main flow:} Find the reservation; confirm cancellation; clear the hold; set Free or Blocked if locked; log the action.
+\par\textbf{Alternative flows and exceptions:} Show distinct messages for missing and expired reservations.
+\par\textbf{Postconditions:} The slot can be reallocated when eligible.
+\subsection{UC-14 -- Configure lot and rates}
+\noindent\textbf{Actor:} Administrator\quad\textbf{Traceability:} REQ-20; REQ-09.
+\par\textbf{Preconditions:} An administrator account exists.
+\par\textbf{Main flow:} Log in; select rate change or new zone; validate; apply and log.
+\par\textbf{Alternative flows and exceptions:} Reject nonpositive rates, invalid types, duplicates, or insufficient privileges. Existing tickets retain their rates.
+\par\textbf{Postconditions:} New tickets use the new rate; new zones are usable in the current session.
+\subsection{UC-15 -- View availability}
+\noindent\textbf{Actor:} Driver\quad\textbf{Traceability:} REQ-02.
+\par\textbf{Preconditions:} The lot hierarchy is available.
+\par\textbf{Main flow:} Traverse lot, floors, and zones; count Free leaves; display free and total counts.
+\par\textbf{Alternative flows and exceptions:} Locked or evacuating branches cannot accept new allocations; compare counts with flags and states.
+\par\textbf{Postconditions:} Query does not modify data.
+\subsection{UC-16 -- Revenue and audit report}
+\noindent\textbf{Actor:} Manager\quad\textbf{Traceability:} REQ-21; REQ-10; REQ-09.
+\par\textbf{Preconditions:} Logged in as manager or administrator.
+\par\textbf{Main flow:} Select a period; read payments and lost-ticket charges; group by zone/floor; return totals and audit events.
+\par\textbf{Alternative flows and exceptions:} No transactions gives zero revenue. Deny attendants access.
+\par\textbf{Postconditions:} Report displayed without modifying source records.
+\subsection{UC-17 -- Override a fee}
+\noindent\textbf{Actor:} Attendant / Manager\quad\textbf{Traceability:} REQ-22; REQ-03; REQ-09.
+\par\textbf{Preconditions:} An active ticket and an authorized requesting role exist.
+\par\textbf{Main flow:} Enter plate, amount, and reason; create Pending request; manager/admin approves; set the replacement amount and log the decision.
+\par\textbf{Alternative flows and exceptions:} Reject negative amounts, missing reasons, or attendant approval. Rejection retains the calculated fee.
+\par\textbf{Postconditions:} The override is effective only after approval.
+\subsection{UC-18 -- Use a monthly/VIP pass}
+\noindent\textbf{Actor:} Driver\quad\textbf{Traceability:} REQ-23; REQ-12.
+\par\textbf{Preconditions:} A plate-based pass is valid at entry.
+\par\textbf{Main flow:} Recognize the plate; find the pass; prioritize VIP slots for VIP holders; record pass type on the ticket; waive parking at exit.
+\par\textbf{Alternative flows and exceptions:} Expired passes use ordinary pricing. Monthly passes cannot use VIP slots. EV energy remains chargeable.
+\par\textbf{Postconditions:} Exit closes the ticket; the accepted pass makes parking free.
+\subsection{UC-19 -- Register/remove a pass}
+\noindent\textbf{Actor:} Administrator\quad\textbf{Traceability:} REQ-23; REQ-09; REQ-29.
+\par\textbf{Preconditions:} Administrator privileges and central-server connectivity exist.
+\par\textbf{Main flow:} Log in; enter plate, monthly/vip type, and expiry date; validate, save, and log; support pass removal.
+\par\textbf{Alternative flows and exceptions:} Reject unknown types, past dates, disconnection, or insufficient privileges.
+\par\textbf{Postconditions:} Pass registered or removed in the simulation data.
+\subsection{UC-20 -- Charge an EV}
+\noindent\textbf{Actor:} Driver / Charging Station\quad\textbf{Traceability:} REQ-24; REQ-25.
+\par\textbf{Preconditions:} An EV slot and valid EV ticket are available.
+\par\textbf{Main flow:} Allocate the nearest EV slot; receive and accumulate kWh; charge parking plus energy on exit.
+\par\textbf{Alternative flows and exceptions:} Reject when EV slots are full; do not allocate EV slots to cars; reject nonpositive kWh.
+\par\textbf{Postconditions:} Energy is included in the EV ticket total.
+\subsection{UC-21 -- Verify an exit plate}
+\noindent\textbf{Actor:} Driver / Exit Camera\quad\textbf{Traceability:} REQ-26; REQ-11.
+\par\textbf{Preconditions:} A ticket and camera plate or explicit unreadable result are available.
+\par\textbf{Main flow:} Read the exit plate; find the ticket; compare; proceed to payment on a match.
+\par\textbf{Alternative flows and exceptions:} Mismatch/unreadable: hold the barrier, log, and call staff; authorized confirmation may release the vehicle.
+\par\textbf{Postconditions:} Release or hold is recorded; omitted input remains an implementation limitation.
+\subsection{UC-22 -- Work offline}
+\noindent\textbf{Actor:} Gate Attendant / Central Server\quad\textbf{Traceability:} REQ-29; REQ-30; REQ-15.
+\par\textbf{Preconditions:} Local data remains usable.
+\par\textbf{Main flow:} Detect disconnection; switch to local mode; allow entry/exit with simulated cash/card; mark logs; process marks and record their count on reconnection.
+\par\textbf{Alternative flows and exceptions:} Refuse online payment, reservations, and pass updates. Evacuation remains available offline.
+\par\textbf{Postconditions:} Local transactions remain in audit; actual network synchronization is not implemented.

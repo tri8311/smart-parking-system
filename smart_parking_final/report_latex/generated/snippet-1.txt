@@ -1,0 +1,4 @@
+def move(cur, new, flow):
+    if new not in flow[cur]:
+        raise ValueError(f"illegal transition {cur} -> {new}")
+    return new

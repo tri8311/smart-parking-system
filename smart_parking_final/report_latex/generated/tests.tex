@@ -1,0 +1,82 @@
+\par\begingroup\scriptsize\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.23000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.28000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.49000\linewidth-2\tabcolsep\relax}}
+\caption{Complete results of 67 automated tests}\label{tab:tests}\\
+\toprule
+\textbf{ID / requirements} & \textbf{Test objective} & \textbf{Actual result} \\ \midrule
+\endfirsthead
+\multicolumn{3}{l}{\small\itshape Complete results of 67 automated tests (continued)}\\
+\toprule
+\textbf{ID / requirements} & \textbf{Test objective} & \textbf{Actual result} \\ \midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\scriptsize Continued on the next page}\\
+\endfoot
+\bottomrule\endlastfoot
+TC-01 / REQ-01 & Entry assigns the nearest free slot of the matching type & Passed: Ticket issued; slot A1 assigned. \\
+TC-02 / REQ-01 & Entry is rejected when the zone is full & Passed: Entry rejected ('zone full'); rejection logged. \\
+TC-03 / REQ-03 & Fee is calculated correctly for a 2h30 stay & Passed: Fee = 30000 VND. \\
+TC-04 / REQ-01; NFR-01 & Slot assignment responds within 1 second under normal load & Passed: p95 = 2.332 ms over 1000 requests. \\
+TC-05 / REQ-05 & Reserved slot is not given to another vehicle & Passed: Other car got A2; VIP-1 got A1. \\
+TC-06 / REQ-06 & Vehicle is located by plate number & Passed: Found: Smart Parking \textgreater{} F1 \textgreater{} A \textgreater{} A2. \\
+TC-07 / REQ-03; REQ-16 & Peak-hour rate is applied once CR-01 is implemented & Passed: CR-01 implemented: 17:00-18:00 charged 15000 VND (1.5 x 10000). \\
+TC-08 / REQ-09 & Attendant account cannot lock a zone & Passed: PermissionError raised; denial logged. \\
+TC-09 / REQ-08 & Locked zone is not assigned to new vehicles & Passed: Car assigned C1 (zone A blocked). \\
+TC-10 / REQ-07 & Lost ticket is charged the maximum daily fee plus penalty & Passed: Charged 290000 VND (24h x 10000 + 50000). \\
+TC-11 / REQ-11 & Plate with high confidence is accepted automatically & Passed: Plate 29A-111 accepted at 95\% confidence. \\
+TC-12 / REQ-11 & Plate with low confidence requires manual entry & Passed: 55\% confidence: manual entry requested and accepted. \\
+TC-13 / REQ-11 & Camera offline falls back to manual entry & Passed: Manual entry required; camera\_offline logged. \\
+TC-14 / REQ-12 & Nearest free slot is assigned & Passed: Assigned B1 (10 m), not A1 (40 m). \\
+TC-15 / REQ-12; REQ-08 & Next nearest slot is assigned when the nearest zone is locked & Passed: Zone B locked: assigned A1. \\
+TC-16 / REQ-13 & Sensor mismatch raises alerts & Passed: Alerts: missing\_vehicle, unauthorized\_vehicle. \\
+TC-17 / REQ-13 & Silent sensor blocks its slot & Passed: B2 blocked on silence, freed on recovery. \\
+TC-18 / REQ-14 & Overstay alert after 24 hours & Passed: 29A-111 parked 25 h in A1 (limit 24 h) \\
+TC-19 / REQ-15 & Evacuation opens barriers and stops new entries & Passed: Barriers open; entry rejected; exit charged 0 VND. \\
+TC-20 / REQ-15; REQ-09 & Attendant cannot trigger evacuation & Passed: PermissionError raised; denial logged. \\
+TC-21 / REQ-15 & Fire alarm starts evacuation without login & Passed: Evacuation started by fire alarm; barriers open. \\
+TC-22 / REQ-15; NFR-06 & Barriers open within 5 seconds of the evacuation trigger & Passed: Barriers open in 0.404 ms (500 cars parked). \\
+TC-23 / REQ-16 & Peak-hour multiplier applies only to peak hours & Passed: Fee = 25000 VND (10000 + 15000). \\
+TC-24 / REQ-17 & Occupancy surcharge applies above 80\% occupancy & Passed: 3rd car base fee; 4th car (100\% occupancy) 12500 VND = 125\% of 10000. \\
+TC-25 / REQ-04 & Barrier opens only after payment is made & Passed: Failed payment: slot stays occupied; after payment the slot is free. \\
+TC-26 / REQ-03 & Exit with an unknown ticket is refused & Passed: Exit refused: ticket not found. \\
+TC-27 / REQ-05 & Reservation is rejected when no slot is free & Passed: 5th reservation rejected (4 car slots reserved). \\
+TC-28 / REQ-05 & No-show reservation is released after 15 minutes & Passed: A1 released at 10:46. \\
+TC-29 / REQ-06 & Locate rejects an unknown plate & Passed: Plate NOPE: vehicle not found. \\
+TC-30 / REQ-08 & Occupied slot stays occupied when its zone is locked & Passed: A1 occupied after lock; blocked after exit. \\
+TC-31 / REQ-07 & Lost ticket without an entry record is escalated & Passed: no entry record: escalate to the Parking Manager. \\
+TC-32 / REQ-07 & Lost ticket without proof of ownership is refused & Passed: Exit refused; refusal logged. \\
+TC-33 / REQ-18 & Valid login returns the account role & Passed: admin1 logged in with role admin. \\
+TC-34 / REQ-18 & Wrong password is rejected & Passed: Login rejected; failed attempts: 1. \\
+TC-35 / REQ-18 & Account is locked after 3 failed attempts & Passed: account locked (correct password refused after 3 failures). \\
+TC-36 / REQ-19 & Cancelling a reservation frees the slot & Passed: A1 released and assigned to the next car. \\
+TC-37 / REQ-19 & Cancelling a missing reservation is reported & Passed: Cancel NOPE: reservation not found. \\
+TC-38 / REQ-20 & Rate change applies to new tickets only & Passed: Car A pays 10000; car B pays 12000. \\
+TC-39 / REQ-20 & Zone added at runtime is assignable at once & Passed: Zone D added; the next car got D1. \\
+TC-40 / REQ-20; REQ-09 & Attendant cannot change rates or add zones & Passed: Both attempts denied. \\
+TC-41 / REQ-02 & Availability counts match the slot states & Passed: A 0/2, F1 2/4, lot 4/6 free. \\
+TC-42 / REQ-21 & Revenue per zone and floor sums to the total & Passed: Zones \{'A': 20000, 'C': 10000\} = floors \{'F1': 20000, 'F2': 10000\} = total 30000. \\
+TC-43 / REQ-10 & Audit log records entry, payment and exit & Passed: Audit events: entry, payment, exit. \\
+TC-44 / REQ-15 & Ending an evacuation restores normal operation & Passed: Barriers closed, slots unblocked, new entry accepted. \\
+TC-45 / REQ-15 & Evacuation cancels reservations & Passed: Reservation cancelled; A1 blocked. \\
+TC-46 / REQ-02; REQ-08 & Locked zone shows zero free slots & Passed: Zone A shows 0 free slots. \\
+TC-47 / REQ-21 & Report for a period without payments shows zero & Passed: Revenue 0, 0 payments. \\
+TC-48 / REQ-27 & A stay of 15 minutes is free & Passed: 15 min = 0 VND; 16 min = 10000 VND. \\
+TC-49 / REQ-28 & The fee of a started 24 hours is capped & Passed: 24 h = 100000 VND (cap); 25 h = 110000 VND. \\
+TC-50 / REQ-22 & An approved fee override replaces the calculated fee & Passed: ticket fee 5000 VND (was 20000); exit charged 5000; logged: override\_requested, override\_approved \\
+TC-51 / REQ-22; REQ-09 & Invalid, unapproved or rejected overrides do not change the fee & Passed: rejected: override needs a non-negative amount and a reason; manager rejects OV-1: fee stays 20000 VND; attendant approval denied: manager or admin only \\
+TC-52 / REQ-23 & A monthly pass parks free of charge & Passed: Monthly pass: 5 h stay costs 0 VND. \\
+TC-53 / REQ-23 & Only VIP pass holders get VIP slots & Passed: VIP holder: V1; monthly holder: A1; ordinary car: A2. \\
+TC-54 / REQ-23 & An expired pass pays the normal fee & Passed: Expired pass: expiry logged, fee 20000 VND. \\
+TC-55 / REQ-23; REQ-09 & Administrator registers and removes a pass & Passed: pass stored; logged: pass\_added (monthly until 2026-11-16); MON-1 removed; removal logged \\
+TC-56 / REQ-23; REQ-09; REQ-29 & Invalid, unauthorized or offline pass registration is refused & Passed: rejected: invalid pass (kind monthly|vip, end date in the future); invalid pass (kind monthly|vip, end date in the future); attendant denied: administrator only; refused: pass registration needs the central server (offline mode) \\
+TC-57 / REQ-24 & EVs get EV slots and cars never do & Passed: EVs got E1 and E2; third EV rejected; the car got A1. \\
+TC-58 / REQ-25 & The energy price is added to the fee & Passed: Fee 59000 VND (24000 parking + 35000 energy). \\
+TC-59 / REQ-25 & A bad energy reading is rejected & Passed: 0 kWh and a car reading were rejected. \\
+TC-60 / REQ-26 & A matching exit plate lets the vehicle leave & Passed: Matching plate: vehicle left. \\
+TC-61 / REQ-26 & A plate mismatch keeps the barrier closed & Passed: Mismatch: exit refused, slot still occupied, mismatch logged. \\
+TC-62 / REQ-26 & An attendant can approve a mismatch or an unreadable plate & Passed: attendant approves: vehicle leaves (10000 VND), approval logged; unreadable plate: barrier stays closed; a guest cannot approve \\
+TC-63 / REQ-29 & Gates keep working offline & Passed: Offline: entry and cash exit worked; 3 records marked. \\
+TC-64 / REQ-29 & Online payment and reservations are refused offline & Passed: online refused: payment gateway unavailable: pay cash or card at the booth; slot Occupied; refused offline: reservation needs the central server (offline mode); pass registration needs the central server (offline mode) \\
+TC-65 / REQ-30 & Records are synchronized when the network returns & Passed: 1 record synchronized; marks cleared; count logged. \\
+TC-66 / REQ-29; REQ-15 & Evacuation works offline & Passed: evacuation offline: barriers OPEN, exit free of charge \\
+TC-67 / REQ-31; NFR-02 & Barrier stays open while a vehicle is present or the sensor fails & Passed: Barrier stayed open with a vehicle present, a sensor fault, and power loss (3 refusals logged); closed when clear. \\
+\end{longtable}\endgroup

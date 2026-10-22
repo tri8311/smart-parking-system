@@ -1,0 +1,46 @@
+\par\begingroup\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.1}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.22000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.32000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.46000\linewidth-2\tabcolsep\relax}}
+\caption{Functional specifications and verification criteria}\label{tab:functional}\\
+\toprule
+\textbf{ID / name} & \textbf{Required behavior} & \textbf{Acceptance / verification interpretation} \\ \midrule
+\endfirsthead
+\multicolumn{3}{l}{\small\itshape Functional specifications and verification criteria (continued)}\\
+\toprule
+\textbf{ID / name} & \textbf{Required behavior} & \textbf{Acceptance / verification interpretation} \\ \midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\scriptsize Continued on the next page}\\
+\endfoot
+\bottomrule\endlastfoot
+REQ-01 Vehicle entry & Issue a ticket with ID, entry time, and a matching slot when capacity exists. & Create the ticket; mark the slot Occupied; reject a plate already in the lot. \\
+REQ-02 Availability display & Show free-slot counts by floor and zone. & Displayed counts equal Free leaves in each branch. \\
+REQ-03 Exit and fee calculation & Calculate fees using started hours and the vehicle-type rate. & Outside peak hours, without surcharge or exemption, fee equals rounded-up hours times the rate. \\
+REQ-04 Payment & Confirm payment before opening the exit barrier in normal mode. & Failed payment retains the vehicle and ticket; allow another method. Evacuation takes priority. \\
+REQ-05 Reservation & Hold a matching slot until 15 minutes after expected arrival. & Do not assign it to another vehicle; release a no-show only after the hold expires. \\
+REQ-06 Locate a vehicle & Look up a parked vehicle by plate. & Return floor, zone, slot, and distance; report not found without an active ticket. \\
+REQ-07 Lost ticket & Look up the plate, verify ownership, charge the fee, and record the incident. & No acceptance criteria in the workbook; proposed criteria and fee discrepancies are discussed in Section 3.1.3. \\
+REQ-08 Zone lock/unlock & Allow administrators to lock or unlock a floor or zone. & Locked slots are not assigned to new vehicles; existing vehicles remain and exit through the appropriate workflow. \\
+REQ-09 Access control & Restrict administrative functions to authenticated roles. & Attendants cannot lock zones; only administrators change configuration. \\
+REQ-10 Transaction audit log & Record entry, exit, and payment transactions. & Events carry timestamps and can be retrieved for a reporting period. \\
+REQ-11 Plate recognition & Accept recognition confidence of at least 80\%; otherwise require manual input. & Accept 80\%; 79\% or camera failure requires manual confirmation. \\
+REQ-12 Nearest-slot allocation & Select the nearest Free slot of the correct type. & Exclude locked/faulty slots; respect reservations and VIP eligibility; break distance ties by tree order. \\
+REQ-13 Sensor reconciliation & Alert when sensor readings differ from ticket data. & Report unticketed or missing vehicles; a silent sensor makes its slot Blocked. \\
+REQ-14 Overstay alert & Alert when parking exceeds 24 hours. & A sensor scan detects and records a stay longer than 24 hours. \\
+REQ-15 Emergency evacuation & Open every barrier, stop new tickets, and waive exit fees. & Triggered by fire alarm or administrator; cancel reservations; only an administrator may end evacuation. \\
+REQ-16 Peak-hour pricing & Apply a 1.5 multiplier to hours starting within 07-09 or 17-19. & Evaluate each started hour in UTC+7; the upper boundary is excluded. \\
+REQ-17 Occupancy surcharge & Apply 25\% when same-type occupancy exceeds 80\% at issuance. & Store the multiplier on the ticket; code checks after allocation and includes Reserved slots. \\
+REQ-18 Staff authentication & Authenticate with a password and lock after three consecutive failures. & Valid login returns a role; the third failure locks the account in the current Accounts object. \\
+REQ-19 Cancel reservation & Cancel a reservation and release its slot immediately. & The slot becomes available or Blocked if locked; distinguish expired reservations. \\
+REQ-20 Lot/rate configuration & Allow administrators to change rates and add valid zones. & New rates affect only new tickets; reject nonpositive rates and duplicate zone names. \\
+REQ-21 Revenue report & Aggregate revenue and audit records over a period. & Zone totals reconcile with floor and overall totals; access is restricted to manager/admin. \\
+REQ-22 Fee override & Record a reasoned request for manager/admin approval. & Amount is nonnegative; attendants cannot approve; an approved amount replaces the exit total. \\
+REQ-23 Monthly/VIP passes & Manage plate-based passes and waive parking for valid passes. & Expired passes at entry use normal pricing; VIP slots require VIP eligibility; energy remains chargeable. \\
+REQ-24 EV slots & Allocate dedicated slots to electric vehicles. & EVs do not receive car slots and vice versa; reject EV entry when EV capacity is exhausted. \\
+REQ-25 Charging fee & Add total kWh times 3,500 VND to the fee. & Accept positive kWh only for EV tickets; two normal hours and 10 kWh total 59,000 VND. \\
+REQ-26 Exit-plate verification & Compare the exit-camera plate with the ticket plate. & Mismatch or unreadable plates block exit and are logged; authorized confirmation may release the vehicle. \\
+REQ-27 Grace period & Waive parking fees for stays of at most 15 minutes. & 15 minutes costs zero; 16 minutes costs one started hour; do not deduct the grace period from longer stays. \\
+REQ-28 Daily fee cap & Cap each 24-hour block at ten hourly rates before surcharge. & 24 normal hours cost 100,000 VND for a car; 25 normal hours cost 110,000 VND. \\
+REQ-29 Offline operation & Continue local entry/exit when disconnected. & Simulated cash/card and evacuation work; refuse online payment, reservations, and pass changes. \\
+REQ-30 Recovery synchronization & Mark offline records and process them on reconnection. & Clear offline marks and log the count; the prototype does not transmit records to a real server. \\
+REQ-31 Barrier interlock & Refuse to close a barrier while a vehicle is detected or the presence sensor fails. & A close command with a vehicle present, a sensor fault, or power loss leaves the barrier open and is logged; a clear way allows closing. \\
+\end{longtable}\endgroup

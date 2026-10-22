@@ -1,0 +1,21 @@
+\par\needspace{11\baselineskip}\begingroup\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.13000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.62000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.25000\linewidth-2\tabcolsep\relax}}
+\caption{NFR results and evidence scope}\label{tab:nfr-results}\\
+\toprule
+\textbf{ID} & \textbf{Recorded result} & \textbf{Evidence type} \\ \midrule
+\endfirsthead
+\multicolumn{3}{l}{\small\itshape NFR results and evidence scope (continued)}\\
+\toprule
+\textbf{ID} & \textbf{Recorded result} & \textbf{Evidence type} \\ \midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\scriptsize Continued on the next page}\\
+\endfoot
+\bottomrule\endlastfoot
+NFR-01 & PASS (simulated): p95 = 0.928 ms over 1000 requests (target \textless{}= 1 second) & Sequential Python timing \\
+NFR-02 & PASS (simulated): 99.98\% uptime, 7 min down in 30 days (target \textgreater{}= 99.5\%; modeled outages) & Assumed outage model \\
+NFR-03 & Not evaluated with new users. & Not verified \\
+NFR-04 & Storage and transport encryption are not implemented. & Not verified \\
+NFR-05 & Metric/target missing; no acceptance conclusion. & Not verified \\
+NFR-06 & PASS (simulated): barriers open in 0.346 ms with 500 cars parked (target \textless{}= 5 seconds) & Sequential Python timing \\
+\end{longtable}\endgroup

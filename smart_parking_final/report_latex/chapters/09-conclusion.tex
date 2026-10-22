@@ -1,0 +1,14 @@
+\chapter*{Overall Conclusion}
+\addcontentsline{toc}{chapter}{Overall Conclusion}
+\section*{Summary of Results Achieved}
+The project applies the eight Software Requirements course topics to a smart parking case study. The dataset contains 31 functional requirements, six NFRs, 22 use cases, 12 hazards, and two change requests. Identifiers remain consistent across specifications, models, and tests. The prototype demonstrates core workflows and extensions such as EVs, monthly/VIP passes, dynamic fees, and offline operation.
+
+The execution recorded for the report passed 67 of 67 tests. Every functional requirement has at least one use-case link and one test link; 68\% have an elicitation-session link. Two specification-data errors, two warnings, and three informational findings remain visible. This separates the outcome of code execution from the completeness of the requirements.
+
+\section*{Lessons Learned}
+Three lessons stand out. First, executable use cases and tests made specification gaps visible: the lost-ticket rule versus the daily cap, exit without an observed plate, and the missing barrier requirement behind HZ-04 (now REQ-31). Second, keeping one dataset as the source for tables, diagrams, and tests made late changes (EV slots, passes, offline mode, the barrier interlock) cheap to propagate, although narrative counts still had to be checked by hand. Third, a passing test suite says little about requirement quality: the quality checker still reports two errors that no test can fix.
+
+\section*{Limitations and Future Work}
+The prototype does not process actual camera images or control real gates, sensors, or chargers. It implements neither real online payment nor network synchronization. Measurements cover sequential Python calls and an assumed outage model. Data protection is unimplemented, usability has no user evaluation, and the scalability NFR is not measurable. Persistence has limitations for dynamic structures, and recovery from file-write failures requires testing.
+
+The next priorities are to complete REQ-07 acceptance criteria, quantify NFR-05, agree on fee-cap/surcharge ordering, and add sources for REQ-22 through REQ-31. Subsequent work can introduce transactional storage, authenticated user sessions, encryption, and concurrent multi-gate tests. Hardware integration should measure event-to-barrier latency and verify interlocks, power loss, and recovery before evaluating an operational SLA and acceptance criteria.

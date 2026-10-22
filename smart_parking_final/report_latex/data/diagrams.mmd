@@ -1,0 +1,209 @@
+%% Slot
+
+stateDiagram-v2
+  [*] --> Free
+  Free --> Blocked
+  Free --> Occupied
+  Free --> Reserved
+  Reserved --> Free
+  Reserved --> Occupied
+  Occupied --> Blocked
+  Occupied --> Free
+  Blocked --> Free
+
+stateDiagram-v2
+  [*] --> Active
+  Active --> Lost
+  Active --> Paid
+  Paid --> Closed
+  Lost --> Closed
+  Closed --> [*]
+
+stateDiagram-v2
+  [*] --> Normal
+  Normal --> Evacuating
+  Evacuating --> Normal
+
+flowchart LR
+  subgraph SYS[Smart Parking System]
+    UC01(("Vehicle entry"))
+    UC02(("Exit and pay"))
+    UC03(("Reserve a slot"))
+    UC04(("Locate my vehicle"))
+    UC05(("Lock or unlock a zone"))
+    UC06(("Handle lost ticket"))
+    UC07(("Recognize plate at entry"))
+    UC08(("Assign nearest slot"))
+    UC09(("Detect parking violation"))
+    UC10(("Emergency evacuation"))
+    UC11(("Pay dynamic fee"))
+    UC12(("Log in"))
+    UC13(("Cancel a reservation"))
+    UC14(("Configure lot and rates"))
+    UC15(("View availability"))
+    UC16(("Generate revenue and audit report"))
+    UC17(("Override a fee"))
+    UC18(("Park with a monthly or VIP pass"))
+    UC19(("Register a pass"))
+    UC20(("Charge an electric vehicle"))
+    UC21(("Verify plate at exit"))
+    UC22(("Work offline"))
+  end
+  ACT01(["Driver"])
+  ACT01 --- UC01
+  ACT01 --- UC02
+  ACT01 --- UC03
+  ACT01 --- UC04
+  ACT01 --- UC07
+  ACT01 --- UC08
+  ACT01 --- UC11
+  ACT01 --- UC13
+  ACT01 --- UC15
+  ACT01 --- UC18
+  ACT01 --- UC20
+  ACT01 --- UC21
+  ACT01 --- UC22
+  ACT02(["Gate Attendant"])
+  ACT02 --- UC06
+  ACT02 --- UC09
+  ACT02 --- UC12
+  ACT02 --- UC17
+  ACT02 --- UC22
+  ACT03(["Parking Administrator"])
+  ACT03 --- UC05
+  ACT03 --- UC10
+  ACT03 --- UC14
+  ACT03 --- UC19
+  ACT04(["Payment Gateway"])
+  ACT04 --- UC02
+  ACT05(["Entry Camera"])
+  ACT05 --- UC07
+  ACT06(["Slot Sensor"])
+  ACT06 --- UC09
+  ACT07(["Fire Alarm"])
+  ACT07 --- UC10
+  ACT08(["Parking Manager"])
+  ACT08 --- UC06
+  ACT08 --- UC16
+  ACT08 --- UC17
+  ACT09(["Charging Station"])
+  ACT09 --- UC20
+  ACT10(["Central Server"])
+  ACT10 --- UC19
+  ACT10 --- UC22
+  ACT11(["Exit Camera"])
+  ACT11 --- UC21
+  UC01 -.->|include| UC07
+  UC01 -.->|include| UC08
+  UC18 -.->|extend| UC01
+  UC02 -.->|include| UC21
+  UC11 -.->|extend| UC02
+  UC17 -.->|extend| UC02
+  UC06 -.->|extend| UC02
+  UC05 -.->|include| UC12
+  UC14 -.->|include| UC12
+  UC16 -.->|include| UC12
+  UC17 -.->|include| UC12
+  UC18 -.->|include| UC07
+  UC19 -.->|include| UC12
+  UC20 -.->|include| UC08
+
+flowchart LR
+  Driver([Driver]) -->|frame, type| P7(7 Recognize plate)
+  Camera([Entry Camera]) -->|plate image| P7
+  P7 -->|plate| P1(1 Entry and nearest slot)
+  P1 -->|ticket, route| Driver
+  Driver -->|ticket| P2(2 Exit and dynamic fee)
+  P2 <-->|payment| PG([Payment Gateway])
+  Driver -->|reservation request| P3(3 Reserve)
+  Driver -->|plate| P4(4 Locate)
+  Attendant([Gate Attendant]) -->|plate| P5(5 Lost ticket)
+  Admin([Administrator]) -->|lock / unlock| P6(6 Zone control)
+  Sensor([Slot Sensor]) -->|readings| P8(8 Monitor slots)
+  P8 -->|alerts| Attendant
+  Alarm([Fire Alarm]) -->|signal| P9(9 Evacuation)
+  Admin -->|trigger| P9
+  P1 <--> D1[(D1 Slots tree)]
+  P2 <--> D1
+  P3 <--> D1
+  P4 --> D1
+  P6 --> D1
+  P8 <--> D1
+  P9 --> D1
+  P1 --> D2[(D2 Tickets)]
+  P2 <--> D2
+  P5 <--> D2
+  P8 --> D2
+  P1 --> D3[(D3 Audit log)]
+  P2 --> D3
+  P5 --> D3
+  P6 --> D3
+  P8 --> D3
+  P9 --> D3
+  Admin -->|account, password| P10(10 Log in)
+  Manager([Parking Manager]) -->|account, password| P10
+  P10 --> D4[(D4 Accounts)]
+  Admin -->|rate, new zone| P11(11 Configure)
+  P11 --> D1
+  P11 --> D3
+  Manager -->|period| P12(12 Report)
+  P12 -->|revenue, audit| Manager
+  P12 --> D3
+  Driver -->|plate| P13(13 Cancel reservation)
+  P13 --> D1
+  Driver -->|look| P14(14 Availability)
+  P14 --> D1
+  Camera2([Exit Camera]) -->|exit plate| P15(15 Verify plate at exit)
+  P15 --> P2
+  P15 --> D3
+  Attendant -->|approval, override request| P16(16 Approve and override)
+  Manager -->|decision| P16
+  P16 --> D2
+  P16 --> D3
+  Admin -->|pass, VIP| P17(17 Passes)
+  P17 --> D5[(D5 Passes)]
+  P1 --> D5
+  Charger([Charging Station]) -->|kWh| P18(18 EV charging)
+  P18 --> D2
+  Server([Central Server]) <-->|sync, reservations, passes| P19(19 Offline mode and sync)
+  P19 --> D3
+
+flowchart LR
+  REQ01 --> REQ02
+  REQ01 --> REQ03
+  REQ03 --> REQ04
+  REQ01 --> REQ05
+  REQ01 --> REQ06
+  REQ03 --> REQ07
+  REQ01 --> REQ08
+  REQ18 --> REQ09
+  REQ01 --> REQ10
+  REQ03 --> REQ10
+  REQ01 --> REQ11
+  REQ01 --> REQ12
+  REQ01 --> REQ13
+  REQ01 --> REQ14
+  REQ08 --> REQ15
+  REQ03 --> REQ16
+  REQ03 --> REQ17
+  REQ05 --> REQ19
+  REQ03 --> REQ20
+  REQ09 --> REQ20
+  REQ10 --> REQ21
+  REQ03 --> REQ22
+  REQ09 --> REQ22
+  REQ03 --> REQ23
+  REQ12 --> REQ23
+  REQ01 --> REQ24
+  REQ24 --> REQ25
+  REQ03 --> REQ25
+  REQ03 --> REQ26
+  REQ11 --> REQ26
+  REQ03 --> REQ27
+  REQ03 --> REQ28
+  REQ16 --> REQ28
+  REQ01 --> REQ29
+  REQ03 --> REQ29
+  REQ29 --> REQ30
+  REQ10 --> REQ30
+  REQ01 --> REQ31

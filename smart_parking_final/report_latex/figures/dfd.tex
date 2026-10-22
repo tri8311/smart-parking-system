@@ -1,0 +1,26 @@
+\widefigure{\begin{tikzpicture}
+\node[box,text width=43mm,minimum height=27mm] (sps) at (0,0) {0. Smart Parking\\System};
+\node[ext] (driver) at (-6.2,0) {Driver};
+\node[ext] (staff) at (6.2,0) {Staff / Manager};
+\node[ext,text width=55mm] (dev) at (0,-3) {Camera, sensors, fire alarm, payment, charging, server};
+\draw[arr] (driver) to[bend left=16] node[above,font=\scriptsize]{plate / request}(sps);
+\draw[arr] (sps) to[bend left=16] node[below,font=\scriptsize]{ticket / slot / fee}(driver);
+\draw[arr] (staff) to[bend left=16] node[below,font=\scriptsize]{command / approval}(sps);
+\draw[arr] (sps) to[bend left=16] node[above,font=\scriptsize]{report / alert}(staff);
+\draw[arr,<->] (sps)--node[right,font=\scriptsize]{event / result}(dev);
+\end{tikzpicture}}{Context-level DFD}{fig:dfd-context}
+
+\widefigure{\begin{tikzpicture}
+\node[ext] (driver) at (-1.5,4) {Driver};\node[ext] (staff) at (7.5,4) {Staff / Devices};
+\node[box] (p1) at (-1.5,2) {1. Entry / Reserve / Guide};
+\node[box] (p2) at (-1.5,-1) {2. Exit / Pricing / Payment};
+\node[box] (p3) at (7.5,2) {3. Monitor / Evacuate};
+\node[box] (p4) at (7.5,-1) {4. Admin / Reports / Offline};
+\node[ext,text width=28mm] (d1) at (3,2) {D1\\Slot Tree};
+\node[ext,text width=28mm] (d2) at (3,-1) {D2\\Tickets};
+\node[ext,text width=28mm] (d3) at (1,-3.5) {D3\\Audit Log};
+\node[ext,text width=28mm] (d4) at (7.5,-3.5) {D4 / D5\\Accounts / Passes};
+\draw[arr] (driver)--(p1);\draw[arr] (driver.west) to[bend right=28] (p2.west);\draw[arr] (staff)--(p3);\draw[arr] (staff.east) to[bend left=28] (p4.east);
+\draw[arr,<->] (p1)--(d1);\draw[arr,<->] (p3)--(d1);\draw[arr,<->] (p2)--(d2);\draw[arr] (p1)--(d2);\draw[arr] (p3)--(d2);\draw[arr] (p4)--(d2);
+\draw[arr] (p2)--(d3);\draw[arr,<->] (p4)--(d3);\draw[arr,<->] (p4)--(d4);
+\end{tikzpicture}}{Decomposed DFD with grouped processes}{fig:dfd-level1}

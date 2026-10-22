@@ -1,0 +1,137 @@
+--- SCENARIO 1: Vehicle Entry with ALPR ---
+Enter vehicle plate [Default: 29A-888.88]: 
+[ALPR CAM] Detected Plate: 29A-888.88 (Confidence 86.8%)
+[ENTRY GATE] Welcome! Assigned Spot A1 (F1), 10 m from the gate.
+[TICKET] Issued TCK-C8BA36F9 | Allocated Spot: A1
+[BARRIER] Gate State: OPEN
+[BARRIER] Car transit complete. Barrier State: CLOSED
+
+--- SCENARIO 2: Vehicle Exit and Payment ---
+Scan ticket ID or plate [Default: 29A-888.88]: 
+[EXIT GATE] Ticket TCK-303350E5 scanned. Plate 29A-888.88, spot A1
+[EXIT CAM] Plate read: 29A-888.88
+[PRICING] Entry 16:20, exit 19:05
+[PRICING]   16:20  10000 VND
+[PRICING]   17:20  15000 VND (peak x1.5)
+[PRICING]   18:20  15000 VND (peak x1.5)
+[PRICING]   Parking fee: 40000 VND
+[PRICING]   Total due: 40000 VND
+Payment method cash/card/online [Default: card]: 
+[PAYMENT] CARD APPROVED: 40000 VND
+[RECEIPT] RCT-8F8B7F1A | 29A-888.88 | 40000 VND | 2026-10-17 19:05
+[BARRIER] Gate State: OPEN
+[BARRIER] Car transit complete. Barrier State: CLOSED
+
+--- SCENARIO 3: Reservation to Exit Journey ---
+[APP] Driver reserves a car slot for 10:30
+[RESERVE] Slot A1 held until 10:45
+[GATE] 10:32 the vehicle arrives
+[ALPR CAM] Detected Plate: 29A-777.77 (Confidence 91.4%)
+[ENTRY GATE] Welcome! Assigned Spot A1 (F1), 10 m from the gate.
+[TICKET] Issued TCK-C5014635 | Allocated Spot: A1
+[BARRIER] Gate State: OPEN
+[BARRIER] Car transit complete. Barrier State: CLOSED
+[SENSOR] Scan of 6 slots: 0 alerts
+[PARKING] The vehicle stays for 3 hours
+Scan ticket ID or plate [Default: 29A-777.77]: 
+[EXIT GATE] Ticket TCK-C5014635 scanned. Plate 29A-777.77, spot A1
+[EXIT CAM] Plate read: 29A-777.77
+[PRICING] Entry 10:32, exit 13:32
+[PRICING]   10:32  10000 VND
+[PRICING]   11:32  10000 VND
+[PRICING]   12:32  10000 VND
+[PRICING]   Parking fee: 30000 VND
+[PRICING]   Total due: 30000 VND
+Payment method cash/card/online [Default: card]: 
+[PAYMENT] CARD APPROVED: 30000 VND
+[RECEIPT] RCT-039F6BB3 | 29A-777.77 | 30000 VND | 2026-10-17 13:32
+[BARRIER] Gate State: OPEN
+[BARRIER] Car transit complete. Barrier State: CLOSED
+
+--- SCENARIO 4: Emergency Evacuation Drill ---
+[FIRE ALARM] Signal received
+[SYSTEM] Evacuation started: 3 slots blocked, reservations cancelled, barriers OPEN
+[ENTRY GATE] New vehicle: rejected, evacuation in progress
+[EXIT GATE] 29A-111 leaves, fee 0 VND
+[EXIT GATE] 29A-222 leaves, fee 0 VND
+[EXIT GATE] 29A-333 leaves, fee 0 VND
+[SYSTEM] Evacuation ended by administrator: barriers CLOSED, lot normal, 6 slots free
+
+--- SCENARIO 5: Ticket Swap at the Exit ---
+[EXIT GATE] Driver of 29A-222 presents the ticket of 29A-111
+[EXIT GATE] Ticket TCK-2AAF4439 scanned. Plate 29A-111, spot A1
+[EXIT CAM] Plate read: 29A-222 - does NOT match ticket plate 29A-111
+[PRICING] Entry 10:00, exit 12:00
+[PRICING]   10:00  10000 VND
+[PRICING]   11:00  10000 VND
+[PRICING]   Parking fee: 20000 VND
+[PRICING]   Total due: 20000 VND
+[EXIT GATE] HOLD: camera read 29A-222 but the ticket belongs to 29A-111: barrier closed, attendant alerted
+[ATTENDANT] Checks the vehicle by eye and approves the exit
+[EXIT GATE] Released with attendant approval, fee 20000 VND
+
+--- SCENARIO 6: Network Outage at the Gates ---
+[SYSTEM] Central server unreachable: gates switch to local mode
+[ALPR CAM] Detected Plate: 29A-222 (Confidence 81.6%)
+[ENTRY GATE] Welcome! Assigned Spot A2 (F1), 13 m from the gate.
+[TICKET] Issued TCK-48CD088E | Allocated Spot: A2
+[BARRIER] Gate State: OPEN
+[BARRIER] Car transit complete. Barrier State: CLOSED
+[PAYMENT] DECLINED: payment gateway unavailable: pay cash or card at the booth
+[EXIT GATE] Ticket TCK-2AAF4439 scanned. Plate 29A-111, spot A1
+[EXIT CAM] Plate read: 29A-111
+[PRICING] Entry 10:00, exit 11:31
+[PRICING]   10:00  10000 VND
+[PRICING]   11:00  10000 VND
+[PRICING]   Parking fee: 20000 VND
+[PRICING]   Total due: 20000 VND
+[PAYMENT] CASH APPROVED: 20000 VND
+[RECEIPT] RCT-96D9422E | 29A-111 | 20000 VND | 2026-10-17 11:31
+[BARRIER] Gate State: OPEN
+[BARRIER] Car transit complete. Barrier State: CLOSED
+[APP] Reservation refused: reservation needs the central server (offline mode)
+[SYSTEM] Connection back: 10 records synchronized
+
+--- SCENARIO 7: EV Charging and Monthly Pass ---
+[ALPR CAM] Detected Plate: 51H-888.88 (Confidence 94.0%)
+[ENTRY GATE] Welcome! Assigned Spot E1 (F2), 65 m from the gate.
+[TICKET] Issued TCK-85AE6A52 | Allocated Spot: E1
+[BARRIER] Gate State: OPEN
+[BARRIER] Car transit complete. Barrier State: CLOSED
+[CHARGER] E1: 43750 VND of energy so far
+Scan ticket ID or plate [Default: 51H-888.88]: 
+[EXIT GATE] Ticket TCK-85AE6A52 scanned. Plate 51H-888.88, spot E1
+[EXIT CAM] Plate read: 51H-888.88
+[PRICING] Entry 10:00, exit 12:00
+[PRICING]   10:00  12000 VND
+[PRICING]   11:00  12000 VND
+[PRICING]   Parking fee: 24000 VND
+[PRICING]   Energy: 12.5 kWh x 3500 = 43750 VND
+[PRICING]   Total due: 67750 VND
+Payment method cash/card/online [Default: card]: 
+[PAYMENT] CARD APPROVED: 67750 VND
+[RECEIPT] RCT-6C2183C3 | 51H-888.88 | 67750 VND | 2026-10-17 12:00
+[BARRIER] Gate State: OPEN
+[BARRIER] Car transit complete. Barrier State: CLOSED
+[ALPR CAM] Detected Plate: 29A-555 (Confidence 83.1%)
+[ENTRY GATE] Welcome! Assigned Spot A1 (F1), 10 m from the gate.
+[TICKET] Issued TCK-A79DD517 | Allocated Spot: A1
+[BARRIER] Gate State: OPEN
+[BARRIER] Car transit complete. Barrier State: CLOSED
+Scan ticket ID or plate [Default: 29A-555]: 
+[EXIT GATE] Ticket TCK-A79DD517 scanned. Plate 29A-555, spot A1
+[EXIT CAM] Plate read: 29A-555
+[PRICING] Entry 13:00, exit 18:00
+[PRICING]   13:00  10000 VND
+[PRICING]   14:00  10000 VND
+[PRICING]   15:00  10000 VND
+[PRICING]   16:00  10000 VND
+[PRICING]   17:00  15000 VND (peak x1.5)
+[PRICING]   Parking fee: 0 VND (free: monthly pass)
+[PRICING]   Total due: 0 VND
+Payment method cash/card/online [Default: card]: 
+[PAYMENT] CARD APPROVED: 0 VND
+[RECEIPT] RCT-7BEE6424 | 29A-555 | 0 VND | 2026-10-17 18:00
+[BARRIER] Gate State: OPEN
+[BARRIER] Car transit complete. Barrier State: CLOSED
+

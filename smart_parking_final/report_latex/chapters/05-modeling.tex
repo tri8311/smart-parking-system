@@ -1,0 +1,24 @@
+\chapter{Modeling Techniques \& Diagrammatic Notations}
+\section{State Machine Diagram}
+\subsection{Slot States}
+A slot has four states: Free, Reserved, Occupied, and Blocked. Transitions are restricted by \texttt{SLOT\_FLOW}; invalid operations raise an error rather than silently overwriting state. The \texttt{locked} and \texttt{fault} flags are additional attributes rather than a fifth state.
+\input{figures/states}
+Locking a zone immediately moves only Free slots to Blocked. Occupied slots retain their vehicles and become Blocked on exit if the lock remains. Existing reservations are retained under UC-05. Evacuation cancels reservations before locking the lot. A sensor fault can change an Occupied slot to Blocked while its ticket remains, so invariants must consider fault flags and ticket links together.
+
+\subsection{Ticket and Lot States}
+An ordinary ticket moves from Active to Paid and then Closed; a lost ticket passes through Lost before Closed. A Closed ticket cannot return to Active. The lot has Normal and Evacuating modes. Only an administrator may end evacuation; a fire alarm may start it without an account. The diagrams represent software transitions and do not establish physical equipment interlocks.
+
+\subsection{Hierarchy and Invariants}
+\input{figures/tree}
+Relevant invariants include: each active ticket has a plate and valid slot; a slot is not assigned to two vehicles in sequential execution; availability equals the number of Free leaves; and no new ticket is issued during evacuation. Multiple threads or gates require atomic transactions and data locking. Transition checks in a single-process simulation do not establish protection against concurrent allocation races.
+
+\section{Data Flow Diagram (DFD)}
+\input{figures/dfd}
+At context level, inputs are driver requests, staff commands, and device events; outputs are tickets, guidance, notifications, fees, and reports. The decomposed DFD groups processes into entry/reservations, exit/pricing, monitoring/safety, and administration/synchronization. Logical stores contain the slot tree, tickets, audit records, accounts, and monthly/VIP passes. These are logical stores implemented through memory and JSON, rather than five separately deployed databases.
+
+Pricing reads tickets and pricing policies, records payment, and returns a result to the gate. Monitoring reconciles sensors against tickets and does not automatically delete a ticket on mismatch. Offline operation marks local records and clears marks on reconnection. The code has no actual transport protocol or multi-replica conflict resolution. A detailed Mermaid model with 19 processes is supplied in \texttt{data/diagrams.mmd} for comparison with the grouped DFD.
+
+\section{Chapter Conclusion}
+State machines define legal transitions; the hierarchy supports aggregation and allocation; DFDs show information sources and use. The three views complement one another but require additional failure-path and concurrency verification as the system grows.
+
+Each view answers a different question. The state machines for slot, ticket, and lot decide which moves are allowed, and the code rejects any other move with an error. The Lot, Floor, Zone, and Slot tree decides how availability is counted, how a zone is locked, and how the nearest slot is found. The context and decomposed DFDs show where plate, payment, sensor, and alarm data enter and leave the system. Together they give the reviewer a way to check a requirement against structure, behavior, and data flow. Concurrent allocation remains untested, and the diagrams do not prove it.

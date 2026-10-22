@@ -1,0 +1,13 @@
+def run_tests(data):
+    out, today, by = {}, datetime.now().date().isoformat(), "SPS terminal tool"
+    for t in data["test_cases"]:
+        fn = TESTS.get(t["id"])
+        try:
+            if fn is None:
+                raise Skip("no automated check")
+            out[t["id"]] = ("Passed", fn(data), by, today)
+        except Skip as e:
+            out[t["id"]] = ("Not Run", str(e), by, today)
+        except AssertionError as e:
+            out[t["id"]] = ("Failed", f"assertion failed: {e}", by, today)
+    return out

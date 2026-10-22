@@ -1,0 +1,15 @@
+\chapter{Use Case Modeling}
+\section{Use Case Diagram}
+The workbook contains 11 actors. The principal human roles are Driver, Gate Attendant, Parking Administrator, and Parking Manager. Entry/exit cameras, slot sensors, fire alarms, the payment gateway, charging stations, and the central server are supporting actors. The diagrams are grouped into three figures for readability: Figures~\ref{fig:uc-driver}, \ref{fig:uc-exit}, and \ref{fig:uc-admin}. Every one of the 22 use cases appears in at least one of them (UC-12 appears in two), and the index in Table~\ref{tab:uc-index} lists all of them.
+\input{figures/usecase}
+An \emph{include} relationship represents reused behavior and is drawn from the base use case to the included one: UC-01 includes UC-07 and UC-08; UC-02 includes UC-21; UC-18 includes UC-07; UC-20 includes UC-08; UC-05, UC-14, UC-16, UC-17, and UC-19 include UC-12. An \emph{extend} relationship is drawn from the extending use case to the base one: UC-18 (monthly/VIP pass) extends UC-01, and UC-11 (dynamic fee), UC-17 (fee override), and UC-06 (lost ticket) extend UC-02. A fire-alarm signal can start UC-10 without waiting for an operator login.
+\input{generated/uc-index}
+
+\section{Detailed Scenarios}
+Each specification records the actor, preconditions, main flow, exceptions, postconditions, and linked requirements. The scenarios emphasize business decisions. Original fields, frequencies, triggers, and complete source text are available in \texttt{data/dataset.json}. Corresponding execution results are stored in \texttt{evidence/use\_case\_runs.txt}.
+\input{generated/usecases}
+
+\section{Chapter Conclusion}
+Use cases translate requirements into executable interactions, especially for capacity shortages, camera faults, payment failure, plate mismatches, and connection loss. Access conditions and evacuation priority appear alongside normal flows so that validation extends beyond successful cases.
+
+The 22 use cases are drawn in three diagrams and specified with preconditions, a main flow, alternative flows tagged by step, and postconditions. The include and extend relations are written in the flow text, so each relation can be read and tested in the same place. Every functional requirement has at least one use-case link (Table~\ref{tab:coverage}), and the use cases are run on the simulation, which turns the descriptions into repeatable evidence. What the use cases do not show is hardware behavior: cameras, sensors, and payment are simulated, so a successful scenario demonstrates the business logic only.

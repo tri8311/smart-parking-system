@@ -1,0 +1,42 @@
+\chapter{Requirements Engineering Process \& Project Kickoff}
+\section{Project Charter}
+\subsection{Problem Statement and Objectives}
+SPS helps the parking operator identify available spaces, allocate a suitable slot for each vehicle type, calculate fees consistently, and record important actions. Drivers need prompt service and clear charges; attendants need procedures for exceptional cases; managers need figures that can be reconciled. During an emergency, safe evacuation takes priority over collecting payment.
+
+\begin{table}[H]\centering\small
+\caption{Project charter and scope of SPS-2026}
+\begin{tabularx}{\linewidth}{L{32mm}X}\toprule
+Item & Description\\\midrule
+Project name / code & Smart Parking System / SPS-2026.\\
+Deliverables & Requirements report; dataset workbook; terminal simulation; models; test suite and execution evidence.\\
+Functional scope & Entry/exit, availability, reservation/cancellation, vehicle location, zone control, dynamic pricing, monthly/VIP passes, EV slots, charging, offline operation, and evacuation.\\
+Outside prototype scope & ALPR (plate recognition) on actual images; physical barriers, sensors, and chargers; banking transactions; multi-user deployment; production databases.\\
+Constraints & Excel as the central dataset; Python implementation; command-line interface; program-controlled time and device models.\\
+Academic completion criteria & Traceable requirements; consistency between models and simulation; reproducible tests; explicit specification defects and evidence limitations.\\\bottomrule
+\end{tabularx}\end{table}
+
+\subsection{Assumptions, Deliverables, and Process}
+The standard lot has two floors: F1 contains zone A for cars and zone B for motorcycles; F2 contains zone C for cars. Each zone has two slots, giving six standard slots in total. EV and VIP zones are added in the relevant scenarios. Slot-to-gate distances are model inputs rather than measurements from a physical site map.
+
+The lifecycle covers elicitation, analysis, specification, validation, and change management. Requirements have stable identifiers; business changes must be checked against dependencies, use cases, tests, and risks. This SRS applies principles of clarity, verifiability, and traceability; full compliance with the standard has not been assessed~\cite{iso29148}.
+\input{generated/process}
+The sample activities last 21 days in total when added one after another (Table~\ref{tab:process}). These are case-study estimates, not an effort log or a delivery commitment. Requirements marked \emph{Proposed} still need business approval even where the prototype already implements the corresponding behavior.
+
+\subsection{Measurable Objectives, Team, and Project Risks}
+The prototype is judged against five measurable objectives, each with evidence in a later chapter: (i) every functional requirement has at least one use-case link and one test link (Table~\ref{tab:coverage}); (ii) all automated tests pass (Table~\ref{tab:tests}); (iii) slot assignment has a 95th-percentile response time of at most one second (NFR-01, Table~\ref{tab:nfr-results}); (iv) all barriers open within five seconds of an evacuation trigger (NFR-06); and (v) every hazard has a documented mitigation and, where possible, a software demonstration (Table~\ref{tab:hazards}).
+
+The team has two members, Đỗ Minh Trí and Nguyễn Bá Trường Giang, who share analysis, implementation, and writing equally; the dataset records no per-person task assignment. The schedule follows the six sample activities of Table~\ref{tab:process}.
+
+Three project risks matter for how the results should be read. First, the stakeholder and elicitation data are authored for the case study and were not validated with real stakeholders. Second, the simulation replaces cameras, sensors, payment, and the network, so behavior on a real site is unknown. Third, the requirement set is large (31 functional requirements and two change requests), which raises the effort of keeping models, tests, and report consistent; regenerating the evidence with \texttt{refresh\_evidence.py} mitigates this.
+
+\section{Stakeholder Analysis}
+\input{generated/stakeholders}
+\input{generated/power-interest}
+Stakeholders with high influence and high interest should participate in approving scope, rates, and acceptance criteria. IT staff should review authentication, storage, and recovery. Drivers should be consulted about availability displays, fees, and lost-ticket handling; attendants should help evaluate exception workflows.
+
+The matrix preserves the sample data. However, the safety inspector's medium influence and low interest should be reconsidered before deployment: evacuation remains a critical constraint regardless of the role's position in a communication grid. Personal names and contact addresses in the workbook are illustrative.
+
+\section{Chapter Conclusion}
+The project focuses on requirements management linked to business-process simulation. This chapter fixes the scope, assumptions, and stakeholder priorities that later chapters build on. Completing the prototype does not constitute acceptance of a real parking installation.
+
+Three points carry forward. First, the five measurable objectives of Section~1.1.3 are the yardstick for the rest of the report: use-case and test links for every functional requirement, passing tests, the slot-assignment and evacuation timings, and a mitigation for every hazard. Second, the sample schedule of six activities totals 21 days and is a case-study estimate, not an effort log. Third, the stakeholder data are authored for this case study, so the priorities derived from them guide the analysis but were not validated with real stakeholders.

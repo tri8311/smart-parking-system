@@ -1,0 +1,28 @@
+\widefigure{\begin{tikzpicture}
+\node[state] (f) at (0,0) {Free};
+\node[state] (r) at (7,0) {Reserved};
+\node[state] (o) at (7,-4) {Occupied};
+\node[state] (b) at (0,-4) {Blocked};
+\node[circle,fill=navy,inner sep=2pt] (start) at (-2,0) {};
+\draw[arr] (start)--(f);
+\draw[arr] (f) to[bend left=14] node[above,font=\scriptsize]{reserve}(r);
+\draw[arr] (r) to[bend left=14] node[below,font=\scriptsize]{cancel / expire}(f);
+\draw[arr] (r)--node[right,font=\scriptsize]{arrival}(o);
+\draw[arr] (f)--node[above,sloped,font=\scriptsize]{entry}(o);
+\draw[arr] (o)--node[below,font=\scriptsize]{exit while locked / slot fault}(b);
+\draw[arr] (b) to[bend left=20] node[left,font=\scriptsize]{restore}(f);
+\draw[arr] (f) to[bend left=20] node[right,font=\scriptsize]{lock / fault}(b);
+\draw[arr] (o.east)--(10,-4)--(10,2)--node[above,font=\scriptsize]{normal exit}(0,2)--(f.north);
+\end{tikzpicture}}{Slot state machine; labels show representative events}{fig:slot-state}
+
+\smallfigure{\begin{tikzpicture}
+\node[state] (a) at (0,0) {Active};\node[state] (p) at (4,1) {Paid};\node[state] (l) at (4,-1) {Lost};\node[state] (c) at (8,0) {Closed};
+\node[circle,fill=navy,inner sep=2pt] (i) at (-2,0) {};\node[circle,draw=navy,double,inner sep=3pt] (e) at (10,0) {};
+\draw[arr] (i)--(a);\draw[arr] (a)--(p);\draw[arr] (a)--(l);\draw[arr] (p)--(c);\draw[arr] (l)--(c);\draw[arr] (c)--(e);
+\end{tikzpicture}}{Ticket state machine}{fig:ticket-state}
+
+\smallfigure{\begin{tikzpicture}
+\node[state] (n) at (0,0) {Normal};\node[state,text width=30mm] (e) at (7,0) {Evacuating};
+\draw[arr] (n) to[bend left=25] node[above,font=\small]{admin trigger / fire alarm}(e);
+\draw[arr] (e) to[bend left=25] node[below,font=\small]{admin ends evacuation}(n);
+\end{tikzpicture}}{Lot state machine}{fig:lot-state}

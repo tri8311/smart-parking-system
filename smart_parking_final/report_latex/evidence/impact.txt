@@ -1,0 +1,17 @@
+CR-01 Add peak-hour pricing [Implemented]
+  directly affected : REQ-03, REQ-16, REQ-17
+  impacted via deps : REQ-03, REQ-04, REQ-07, REQ-10, REQ-16, REQ-17, REQ-20, REQ-21, REQ-22, REQ-23, REQ-25, REQ-26, REQ-27, REQ-28, REQ-29, REQ-30
+  use cases to review: UC-02, UC-06, UC-11, UC-14, UC-16, UC-17, UC-18, UC-19, UC-20, UC-21, UC-22
+  tests to re-run    : TC-03, TC-07, TC-10, TC-23, TC-24, TC-25, TC-26, TC-31, TC-32, TC-38, TC-39, TC-40, TC-42, TC-43, TC-47, TC-48, TC-49, TC-50, TC-51, TC-52, TC-53, TC-54, TC-55, TC-56, TC-58, TC-59, TC-60, TC-61, TC-62, TC-63, TC-64, TC-65, TC-66
+  hazards to review  : HZ-02, HZ-09, HZ-10, HZ-11, HZ-12
+  complexity of impacted requirements: 49
+  estimate: cost 5 days, schedule 7 days
+
+CR-02 Add EV charging slots [Implemented]
+  directly affected : REQ-01, REQ-02, REQ-05, REQ-24, REQ-25
+  impacted via deps : REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, REQ-07, REQ-08, REQ-10, REQ-11, REQ-12, REQ-13, REQ-14, REQ-15, REQ-16, REQ-17, REQ-19, REQ-20, REQ-21, REQ-22, REQ-23, REQ-24, REQ-25, REQ-26, REQ-27, REQ-28, REQ-29, REQ-30, REQ-31
+  use cases to review: UC-01, UC-02, UC-03, UC-04, UC-05, UC-06, UC-07, UC-08, UC-09, UC-10, UC-11, UC-13, UC-14, UC-15, UC-16, UC-17, UC-18, UC-19, UC-20, UC-21, UC-22
+  tests to re-run    : TC-01, TC-02, TC-03, TC-04, TC-05, TC-06, TC-07, TC-09, TC-10, TC-11, TC-12, TC-13, TC-14, TC-15, TC-16, TC-17, TC-18, TC-19, TC-20, TC-21, TC-22, TC-23, TC-24, TC-25, TC-26, TC-27, TC-28, TC-29, TC-30, TC-31, TC-32, TC-36, TC-37, TC-38, TC-39, TC-40, TC-41, TC-42, TC-43, TC-44, TC-45, TC-46, TC-47, TC-48, TC-49, TC-50, TC-51, TC-52, TC-53, TC-54, TC-55, TC-56, TC-57, TC-58, TC-59, TC-60, TC-61, TC-62, TC-63, TC-64, TC-65, TC-66, TC-67
+  hazards to review  : HZ-02, HZ-03, HZ-04, HZ-06, HZ-07, HZ-08, HZ-09, HZ-10, HZ-11, HZ-12
+  complexity of impacted requirements: 87
+  estimate: cost 3 days, schedule 3 days

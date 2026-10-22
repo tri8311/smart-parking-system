@@ -1,0 +1,495 @@
+UC-01 Vehicle entry   (actor: Driver, frequency: Very high (daily))
+Goal         : Park a vehicle in an available slot
+Precondition : A free slot of the vehicle type exists; the lot is not evacuating
+Trigger      : Vehicle arrives at the entry gate
+Main flow:
+  1. Driver arrives at the entry gate
+       => 29A-111 (car) at the entry gate
+  2. System reads the plate number and vehicle type <<include UC-07>>
+       => plate=29A-111, type=car
+  3. System finds the nearest available slot of matching type <<include UC-08>> <<extended by UC-18>>
+       => nearest free car slot: A1
+  4. System issues a ticket with an ID and the entry time
+       => ticket TCK-2AAF4439, entry 10:00
+  5. System shows the assigned slot and opens the entry barrier, which closes after the vehicle has passed
+       => show A1 (Smart Parking > F1 > A > A1); barrier OPEN, then CLOSED after transit
+Alternative flows:
+  A1. [step 3] If no free slot of the vehicle type exists, system rejects entry and shows 'zone full'
+       => 3rd moto: REJECTED 'zone full' (cars unaffected)
+  A2. [step 3] If a slot is reserved for this plate, system assigns the reserved slot
+       => VIP-1 gets its reserved slot A1
+  A3. [step 2, exception] If the plate is already inside the lot, system rejects the entry
+       => rejected: 29A-111 is already parked
+Postcondition: Ticket created; slot marked occupied; barrier closed again
+
+UC-02 Exit and pay   (actor: Driver, frequency: Very high (daily))
+Goal         : Pay the parking fee and leave
+Precondition : Vehicle has an active ticket
+Trigger      : Driver reaches the exit gate
+Main flow:
+  1. Driver presents the ticket at the exit gate
+       => ticket TCK-2AAF4439 presented
+  2. System checks the entry time and the plate <<include UC-21>>
+       => entry 10:00, exit 12:30 (2h30)
+  3. System calculates the fee by started hours <<extended by UC-11>> <<extended by UC-17>>
+       => 3 started hours x 10000 = 30000 VND (off-peak)
+  4. Driver pays the fee by cash, card or online via the Payment Gateway
+       => paid 30000 VND by card
+  5. System prints the receipt, frees the slot and opens the exit barrier
+       => receipt printed; slot A1 is Free; exit barrier OPEN
+Alternative flows:
+  A1. [step 1] If the ticket is not found, system refuses the exit and directs the driver to the attendant <<extended by UC-06>>
+       => refused: ticket not found; driver sent to attendant (UC-06)
+  A2. [step 4, exception] If payment fails, the barrier stays closed and the driver retries or changes the payment method
+       => payment failed: barrier stays closed, slot occupied; retry with card -> open
+  A3. [step 4, exception] If the Payment Gateway is unavailable, online payment is refused and the driver pays cash or card at the booth
+       => gateway down: online refused, slot occupied; driver pays cash at the booth -> open
+Postcondition: Ticket closed; fee and receipt recorded; slot free
+
+UC-03 Reserve a slot   (actor: Driver, frequency: Medium)
+Goal         : Reserve a slot before arriving
+Precondition : A slot of the requested type is free
+Trigger      : Driver plans a visit
+Main flow:
+  1. Driver selects the vehicle type and the arrival time
+       => car, arrival 10:30
+  2. System finds a free slot
+       => free slot found: A1
+  3. System marks the slot reserved for the plate
+       => A1 reserved for VIP-1 until 10:45
+  4. System confirms the reservation
+       => reservation confirmed
+Alternative flows:
+  A1. [step 2] If no free slot exists, system rejects the reservation
+       => 5th reservation: REJECTED (all 4 car slots reserved)
+  A2. [step 3, exception] If the driver does not arrive within 15 minutes after the arrival time, system releases the reservation
+       => A1 released at 10:46 (no-show over 15 min)
+Postcondition: Reservation recorded; slot reserved
+
+UC-04 Locate my vehicle   (actor: Driver, frequency: Medium)
+Goal         : Find where the vehicle is parked
+Precondition : Vehicle is currently parked
+Trigger      : Driver returns to the lot
+Main flow:
+  1. Driver enters the plate number
+       => plate 29A-333 entered
+  2. System searches the active tickets
+       => searched 3 active tickets
+  3. System displays the floor, zone and slot with the distance from the gate
+       => display: 50 m from the gate: Smart Parking > F2 > C > C1
+Alternative flows:
+  A1. [step 2] If the plate is not found, system shows 'vehicle not found'
+       => 'vehicle not found'
+Postcondition: Location displayed
+
+UC-05 Lock or unlock a zone   (actor: Parking Administrator, frequency: Low)
+Goal         : Block a floor or zone from new vehicles, or reopen it
+Precondition : Account exists; lot is not evacuating
+Trigger      : Maintenance or event planned
+Main flow:
+  1. Administrator authenticates <<include UC-12>>
+       => admin1 logged in, role admin
+  2. Administrator selects a floor or zone
+       => zone A selected
+  3. Administrator chooses lock or unlock
+       => action: lock, later unlock
+  4. System blocks the free slots (lock) or frees the blocked slots (unlock) of that branch
+       => lock: 2 free slots in A set to Blocked (new car went to C1); unlock: 2 slots freed
+  5. System confirms and logs the change
+       => changes logged (lock, unlock)
+Alternative flows:
+  A1. [step 4] If occupied slots exist in the branch, they stay occupied until the vehicles leave and then become blocked
+       => A1 stays Occupied while A locked; after exit it becomes Blocked
+  A2. [step 4] If reserved slots exist in the branch, they keep their reservation
+       => A1 reserved for VIP-1 keeps its reservation; VIP-1 still gets A1
+  A3. [step 4] On unlock, slots whose sensor is faulty stay blocked
+       => unlock: B1 freed, B2 stays Blocked because its sensor is faulty
+  A4. [step 1, exception] If the account is not an administrator, system denies access
+       => attendant denied: administrator only
+Postcondition: Locked branch is not assigned to new vehicles; unlocked branch is assignable
+
+UC-06 Handle lost ticket   (actor: Gate Attendant, frequency: Low)
+Goal         : Let a driver without a ticket exit
+Precondition : Driver is at the exit gate without a ticket
+Trigger      : Driver reports a lost ticket
+Main flow:
+  1. Attendant enters the plate number
+       => plate 29A-111 entered
+  2. Attendant checks the identity and proof of ownership of the driver
+       => identity and proof of ownership checked: accepted
+  3. System looks up the entry record
+       => entry record found, entry 10:00
+  4. System charges the maximum daily fee plus the penalty
+       => fee = 24h x 10000 + 50000 penalty = 290000 VND
+  5. System frees the slot and logs the incident
+       => slot A1 freed; incident logged
+Alternative flows:
+  A1. [step 3] If no entry record is found, the attendant escalates to the Parking Manager
+       => no entry record: escalate to the Parking Manager
+  A2. [step 2, exception] If the driver cannot prove ownership, system refuses the exit and notifies the Parking Manager
+       => ownership not proven: exit refused, manager notified
+Postcondition: Ticket closed; incident logged
+
+UC-07 Recognize plate at entry   (actor: Driver, frequency: Very high (daily))
+Goal         : Identify the vehicle automatically at the entry gate
+Precondition : Entry Camera is online; vehicle is stopped at the gate
+Trigger      : Vehicle stops at the entry gate
+Main flow:
+  1. Driver stops at the entry gate
+       => car stops at the entry gate
+  2. Entry Camera captures the plate image
+       => frame captured (image quality 95%)
+  3. System reads the plate number with a confidence score
+       => plate read: 29A-111, confidence 95%
+  4. System accepts the plate when confidence is at least 80%
+       => confidence >= 80%: accepted, attendant not needed
+  5. System continues with the vehicle entry
+       => entry continues: ticket TCK-2AAF4439, slot A1
+Alternative flows:
+  A1. [step 4] If confidence is below 80%, system asks the attendant to enter the plate manually
+       => confidence 55% (read '2?A?2?2'): attendant asked; manual entry '29A-222' accepted
+  A2. [step 2, exception] If the Entry Camera is offline, system switches to manual entry and logs the fault
+       => camera offline: manual entry used, fault logged
+Postcondition: Plate number confirmed (read or manual) and passed to vehicle entry
+
+UC-08 Assign nearest slot   (actor: Driver, frequency: Very high (daily))
+Goal         : Park as close to the gate as possible
+Precondition : A free slot of the vehicle type exists
+Trigger      : Vehicle entry is accepted
+Main flow:
+  1. System receives the vehicle type from the gate
+       => vehicle type: car
+  2. System lists the free slots of that type
+       => free car slots: A1, A2, B1, B2
+  3. System computes the distance of each slot to the gate
+       => distances: A1=40 m, A2=43 m, B1=10 m, B2=13 m
+  4. System assigns the slot with the shortest distance
+       => nearest: B1 (10 m); first in tree order would be A1 (40 m)
+  5. System shows the route to the slot
+       => route: 10 m from the gate: Smart Parking > F1 > B > B1
+Alternative flows:
+  A1. [step 4] If the nearest zone is locked or full, system assigns the next nearest slot
+       => zone B locked: next nearest is A1 (40 m)
+  A2. [step 4] If several slots have equal distance, system assigns the first in tree order
+       => A1 and B1 both 10 m: tree order gives A1
+Postcondition: Nearest free slot assigned and route shown
+
+UC-09 Detect parking violation   (actor: Gate Attendant, frequency: High (continuous))
+Goal         : Be alerted to wrong-slot parking, overstay and sensor faults
+Precondition : Slot Sensors are online
+Trigger      : Periodic sensor scan
+Main flow:
+  1. Slot Sensor reports the occupancy of each slot
+       => 6 sensors report occupancy
+  2. System compares the readings with the ticket records
+       => compared with 1 active ticket(s)
+  3. System detects a mismatch
+       => mismatch: ticket holds A1 but vehicle sits in A2
+  4. System raises an alert to the attendant
+       => 2 alerts sent to attendant: missing_vehicle, unauthorized_vehicle
+  5. Attendant moves the ticket to the slot where the vehicle really is and the system rescans
+       => ticket moved A1 -> A2; rescan: 0 alerts
+Alternative flows:
+  A1. [step 3, exception] If a Slot Sensor sends no heartbeat, system blocks the slot and raises a sensor-fault alert
+       => B2 silent: slot Blocked + fault alert; sensor back: slot Free again
+  A2. [step 3] If a vehicle has stayed longer than 24 hours, system raises an overstay alert
+       => 29A-111 parked 25 h in A1 (limit 24 h)
+Postcondition: Alerts raised and logged; ticket matches the sensors; faulty slots blocked
+
+UC-10 Emergency evacuation   (actor: Parking Administrator, frequency: Very low)
+Goal         : Let all vehicles leave quickly and stop new entries
+Precondition : Administrator is authenticated
+Trigger      : Fire Alarm or emergency drill
+Main flow:
+  1. Administrator triggers the evacuation
+       => evacuation triggered by administrator
+  2. System opens all entry and exit barriers
+       => barriers: open; 29A-111 left, fee 0 VND
+  3. System locks the whole lot so that no new ticket is issued and cancels all reservations
+       => 4 slots blocked, 1 reservation cancelled; new entry rejected
+  4. System shows the evacuation message on all floors
+       => message 'EVACUATE' shown on floors F1, F2
+  5. System logs the evacuation start and the operator
+       => logged: source=operator, role=admin
+  6. Administrator ends the evacuation and the system closes the barriers and unlocks the lot
+       => evacuation ended: 5 slots unblocked, barriers closed, new entry accepted
+Alternative flows:
+  A1. [step 1, exception] If the account is not an administrator, system denies access
+       => attendant denied: administrator only
+  A2. [step 1] If the Fire Alarm sends the signal, system starts the evacuation without operator login
+       => fire alarm started the evacuation without operator login; barriers open
+  A3. [step 6, exception] If an attendant tries to end the evacuation, system denies access
+       => attendant cannot end the evacuation: lot stays evacuating
+Postcondition: Barriers open during the evacuation and closed after it; exits free of charge; lot normal again
+
+UC-11 Pay dynamic fee   (actor: Driver, frequency: Very high (daily))
+Goal         : Pay a fee that reflects peak hours and lot occupancy
+Precondition : Vehicle has an active ticket
+Trigger      : Driver reaches the exit gate
+Main flow:
+  1. Driver presents the ticket at the exit gate
+       => ticket TCK-B68C597C presented
+  2. System splits the stay into started hours
+       => 16:00-19:30 = 4 started hours
+  3. System applies the peak-hour multiplier to each hour that starts in a peak period
+       => 16:00 10000; 17:00 15000 peak; 18:00 15000 peak; 19:00 10000 = 50000
+  4. System applies the occupancy surcharge recorded at entry
+       => occupancy at entry car 100% > 80%: x1.25
+  5. System shows the fee breakdown and the driver pays
+       => fee 62500 VND shown and paid
+Alternative flows:
+  A1. [step 3] If the stay has no peak hours and occupancy was at most 80% at entry, system charges the base rate
+       => off-peak, occupancy 25%: base rate, 2 h = 20000 VND
+  A2. [step 3] If the vehicle is a motorbike, the same multipliers apply to the motorbike rate
+       => moto 17:00-17:30: 3000 x 1.5 = 4500 VND
+  A3. [step 2] If the stay is 15 minutes or less, system charges nothing (grace period)
+       => grace period: 15 min = 0 VND, 16 min = 10000 VND
+  A4. [step 3] If the fee of a started 24 hours exceeds 10 hourly rates, system charges the daily cap for that day
+       => daily cap: 24 h would be 260000, charged 100000 VND; 25 h = 110000 VND
+Postcondition: Ticket closed; dynamic fee recorded
+
+UC-12 Log in   (actor: Gate Attendant, frequency: High (daily))
+Goal         : Authenticate to use staff functions
+Precondition : The account exists and is not locked
+Trigger      : Staff member starts a session
+Main flow:
+  1. User enters the account name and password
+       => user enters admin1 and the password
+  2. System checks the credentials
+       => credentials match
+  3. System determines the role of the account
+       => role of admin1: admin
+  4. System grants the functions of that role and logs the login
+       => access granted; event logged: login
+Alternative flows:
+  A1. [step 2, exception] If the credentials are wrong, system rejects the login and counts the failed attempt
+       => invalid credentials; failed attempts: 1
+  A2. [step 2, exception] After 3 consecutive failed attempts, system locks the account and logs the incident
+       => account locked after 3 failed attempts; correct password now: account locked
+Postcondition: Session role set; failures logged
+
+UC-13 Cancel a reservation   (actor: Driver, frequency: Low)
+Goal         : Cancel a reservation that is no longer needed
+Precondition : A reservation exists for the plate
+Trigger      : Driver changes plans
+Main flow:
+  1. Driver enters the plate number
+       => plate VIP-1 entered
+  2. System finds the reservation
+       => reservation found: A1
+  3. Driver confirms the cancellation
+       => driver confirms the cancellation
+  4. System releases the slot and logs the cancellation
+       => A1 released (state Free) and assigned to the next car; cancellation logged
+Alternative flows:
+  A1. [step 2] If no reservation exists, system shows 'reservation not found'
+       => reservation not found
+  A2. [step 2] If the reservation already expired after the 15 minute hold, system shows 'reservation expired'
+       => reservation expired
+Postcondition: Reservation removed; slot free for other vehicles
+
+UC-14 Configure lot and rates   (actor: Parking Administrator, frequency: Low)
+Goal         : Change the hourly rate or add a zone while the lot is running
+Precondition : Account exists
+Trigger      : Operator changes pricing or extends the lot
+Main flow:
+  1. Administrator authenticates <<include UC-12>>
+       => admin1 authenticated, role admin
+  2. Administrator chooses to change a rate or add a zone
+       => change: car rate 12000 and new zone D (2 car slots) on F2
+  3. System validates the input
+       => rate > 0 and zone name D unused: input valid
+  4. System applies the change
+       => rate applied; zone D added; next car assigned D1 (65 m from the gate: Smart Parking > F2 > D > D1)
+  5. System logs the change
+       => logged: rate_change, zone_added
+Alternative flows:
+  A1. [step 4] Vehicles already parked keep the rate of their ticket
+       => parked 29A-111 keeps 10000/h; new tickets pay 12000/h
+  A2. [step 3, exception] If the input is invalid (rate not positive, duplicate zone name), system rejects it
+       => rejected: invalid rate input
+  A3. [step 1, exception] If the account is not an administrator, system denies access
+       => attendant denied: administrator only
+Postcondition: New rate applies to new tickets; new zone slots are assignable
+
+UC-15 View availability   (actor: Driver, frequency: Very high (daily))
+Goal         : See where free slots are before entering
+Precondition : None
+Trigger      : Driver approaches the lot
+Main flow:
+  1. Driver looks at the availability display
+       => driver looks at the display
+  2. System counts the free slots per floor and zone
+       => counted free slots over 6 slots in 5 floors and zones
+  3. System displays the counts
+       => Smart Parking 4/6, F1 2/4, A 0/2, B 2/2, F2 2/2, C 2/2
+Alternative flows:
+  A1. [step 2] If a floor or zone is locked or evacuating, system shows 0 free slots for it
+       => zone A locked: shows 0/2 free
+Postcondition: Counts displayed and equal to the real slot states
+
+UC-16 Generate revenue and audit report   (actor: Parking Manager, frequency: Low)
+Goal         : Review revenue and audited transactions of a period
+Precondition : Account exists
+Trigger      : Manager prepares a review or an audit
+Main flow:
+  1. Parking Manager authenticates <<include UC-12>>
+       => mgr1 authenticated, role manager
+  2. Parking Manager selects a period
+       => period 10:00-15:00
+  3. System collects the payments and lost-ticket charges of the period
+       => 3 payments collected
+  4. System groups the revenue per floor and zone
+       => floors {'F1': 30000, 'F2': 10000}, zones {'A': 30000, 'C': 10000}
+  5. System shows the report and the audit log entries of the period
+       => total 40000 VND; 9 audit entries listed
+Alternative flows:
+  A1. [step 3] If no transaction exists in the period, system shows zero revenue
+       => empty period: revenue 0, 0 payments
+  A2. [step 1, exception] If the account is an attendant, system denies access
+       => attendant denied: administrator or manager only
+Postcondition: Report displayed; nothing changed
+
+UC-17 Override a fee   (actor: Gate Attendant, frequency: Low)
+Goal         : Correct a wrong fee with the approval of a manager
+Precondition : Vehicle has an active ticket
+Trigger      : Attendant finds a wrong fee
+Main flow:
+  1. Attendant authenticates <<include UC-12>>
+       => attendant authenticated (UC-12)
+  2. Attendant enters the plate, the corrected amount and the reason
+       => plate 29A-111, amount 5000, reason 'meter fault: driver overcharged'
+  3. System validates the input and records a pending override request
+       => OV-1 recorded as Pending; fee still 20000 VND
+  4. Parking Manager reviews the request and approves it
+       => manager approves OV-1
+  5. System applies the approved amount to the ticket and logs the request and the decision
+       => ticket fee 5000 VND (was 20000); exit charged 5000; logged: override_requested, override_approved
+Alternative flows:
+  A1. [step 3, exception] If the reason is empty or the amount is negative, system rejects the request
+       => rejected: override needs a non-negative amount and a reason
+  A2. [step 4] If the Parking Manager rejects the request, system keeps the calculated fee
+       => manager rejects OV-1: fee stays 20000 VND
+  A3. [step 4, exception] If an attendant tries to approve, system denies access
+       => attendant approval denied: manager or admin only
+Postcondition: Ticket carries the approved amount; request and decision logged
+
+UC-18 Park with a monthly or VIP pass   (actor: Driver, frequency: High (daily))
+Goal         : Park without an hourly fee and, with a VIP pass, in a VIP slot
+Precondition : The administrator registered a pass for the plate
+Trigger      : Pass holder arrives at the gate
+Main flow:
+  1. Driver arrives at the entry gate with a registered plate
+       => VIP-1 (car) at the entry gate
+  2. System identifies the plate <<include UC-07>>
+       => plate VIP-1 read (UC-07)
+  3. System finds a valid pass for the plate
+       => vip pass found, valid until 2026-11-16
+  4. System assigns a slot, a VIP slot first for a VIP pass
+       => VIP slot V1 (1 m)
+  5. System issues a ticket marked with the pass type and opens the entry barrier
+       => ticket TCK-CD14500E marked 'vip'; entry barrier OPEN
+  6. System charges no parking fee at the exit
+       => 5 h stay, parking fee 0 VND
+Alternative flows:
+  A1. [step 3] If the pass has ended, system logs the expiry and treats the vehicle as a normal visitor
+       => pass ended 2026-10-18: expiry logged, 2 h charged 20000 VND
+  A2. [step 4] If the pass is a monthly pass, system assigns an ordinary slot and never a VIP slot
+       => monthly holder gets A1, not VIP slot V1; parking 0 VND
+  A3. [step 6] If the vehicle is an EV, system still bills the charged energy
+       => EV with monthly pass: parking 0, energy 10 kWh x 3500 = 35000 VND
+Postcondition: Ticket closed; parking free of charge
+
+UC-19 Register a pass   (actor: Parking Administrator, frequency: Low)
+Goal         : Give a plate a monthly or VIP pass, or remove it
+Precondition : Account exists; central server reachable
+Trigger      : Customer buys or ends a pass
+Main flow:
+  1. Administrator authenticates <<include UC-12>>
+       => admin1 authenticated, role admin
+  2. Administrator enters the plate, the pass type and the end date
+       => plate MON-1, type monthly, end date 2026-11-16
+  3. System validates the input
+       => type known and end date in the future: valid
+  4. System stores the pass and logs the registration
+       => pass stored; logged: pass_added (monthly until 2026-11-16)
+Alternative flows:
+  A1. [step 3, exception] If the pass type is unknown or the end date is in the past, system rejects the input
+       => rejected: invalid pass (kind monthly|vip, end date in the future); invalid pass (kind monthly|vip, end date in the future)
+  A2. [step 1, exception] If the account is not an administrator, system denies access
+       => attendant denied: administrator only
+  A3. [step 4, exception] If the Central Server is unreachable, system refuses the registration
+       => refused: pass registration needs the central server (offline mode)
+  A4. [step 2] If the administrator removes a pass, system deletes it and logs the removal
+       => MON-1 removed; removal logged
+Postcondition: Pass stored or removed; change logged
+
+UC-20 Charge an electric vehicle   (actor: Driver, frequency: Medium)
+Goal         : Park an EV at a charging slot and pay for the energy
+Precondition : A free EV slot exists
+Trigger      : EV arrives at the gate
+Main flow:
+  1. Driver arrives at the entry gate with an EV
+       => EV-1 (ev) at the entry gate
+  2. System assigns the nearest free EV slot <<include UC-08>>
+       => nearest free EV slot: E1 (65 m from the gate: Smart Parking > F2 > E > E1)
+  3. Charging Station reports the energy charged in kWh
+       => charger reports 10 kWh; energy cost 35000 VND
+  4. System adds the energy price to the fee at the exit
+       => 2 h x 12000 = 24000 VND parking + 35000 VND energy = 59000 VND
+  5. Driver pays the total at the exit
+       => paid 59000 VND; slot E1 Free
+Alternative flows:
+  A1. [step 2] If no EV slot is free, system rejects the entry
+       => 2nd EV: REJECTED (EV zone full)
+  A2. [step 2] If the vehicle is a car, system never assigns an EV slot
+       => 5th car: REJECTED although E1 is free (cars never use EV slots)
+  A3. [step 3, exception] If the energy reading is zero or negative, system rejects the reading
+       => rejected: 0 kWh, -3 kWh and a car reading (charging needs an EV in an EV slot and a positive energy reading)
+Postcondition: Ticket closed; parking and energy paid
+
+UC-21 Verify plate at exit   (actor: Driver, frequency: Very high (daily))
+Goal         : Leave only with the vehicle that matches the ticket
+Precondition : Vehicle has an active ticket
+Trigger      : Vehicle stops at the exit gate
+Main flow:
+  1. Exit Camera reads the plate of the vehicle at the exit gate
+       => exit camera reads 29A-111
+  2. System finds the ticket presented by the driver
+       => ticket of 29A-111 found
+  3. System compares the plate read with the plate of the ticket
+       => read 29A-111 == ticket 29A-111
+  4. System accepts the match and releases the vehicle for payment
+       => match: payment 10000 VND, vehicle released
+Alternative flows:
+  A1. [step 3, exception] If the plates differ, the barrier stays closed and the system logs the mismatch and alerts the attendant
+       => camera read 29A-999 but the ticket belongs to 29A-222: barrier closed, attendant alerted; slot A2 still occupied
+  A2. [step 3] If an attendant verifies the vehicle and approves, system lets it leave and logs the approval
+       => attendant approves: vehicle leaves (10000 VND), approval logged
+  A3. [step 1] If the Exit Camera cannot read the plate, system treats it as a mismatch
+       => unreadable plate: barrier stays closed; a guest cannot approve
+Postcondition: Vehicle released or held; mismatch logged
+
+UC-22 Work offline   (actor: Gate Attendant, frequency: Low)
+Goal         : Keep the gates running while the central server is unreachable
+Precondition : Gates and local data are available
+Trigger      : Network or server failure
+Main flow:
+  1. Central Server connection is lost
+       => central server connection lost at 10:30
+  2. System switches the gates to local mode and logs the event
+       => logged: network_down; gates in local mode
+  3. Drivers enter and leave as usual with cash or card payment
+       => 29A-222 enters, 29A-111 exits and pays 20000 VND cash
+  4. System marks every record made in local mode
+       => 3 records marked offline
+  5. Connection returns and the system synchronizes the marked records and logs their number
+       => connection back: 3 records synchronized, marks cleared
+Alternative flows:
+  A1. [step 3] If a driver chooses online payment, system refuses it and asks for cash or card
+       => online refused: payment gateway unavailable: pay cash or card at the booth; slot Occupied
+  A2. [step 3, exception] If a driver asks for a reservation or the administrator registers a pass, system refuses it until the connection returns
+       => refused offline: reservation needs the central server (offline mode); pass registration needs the central server (offline mode)
+  A3. [step 3] If an evacuation is triggered in local mode, the barriers open as usual
+       => evacuation offline: barriers OPEN, exit free of charge
+Postcondition: No record lost; marks cleared after synchronization

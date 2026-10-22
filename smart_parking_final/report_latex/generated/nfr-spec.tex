@@ -1,0 +1,21 @@
+\par\needspace{11\baselineskip}\begingroup\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.23000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.52000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.25000\linewidth-2\tabcolsep\relax}}
+\caption{Non-functional requirements}\label{tab:nfr-spec}\\
+\toprule
+\textbf{ID / category} & \textbf{Specification and target} & \textbf{Priority / verification} \\ \midrule
+\endfirsthead
+\multicolumn{3}{l}{\small\itshape Non-functional requirements (continued)}\\
+\toprule
+\textbf{ID / category} & \textbf{Specification and target} & \textbf{Priority / verification} \\ \midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\scriptsize Continued on the next page}\\
+\endfoot
+\bottomrule\endlastfoot
+NFR-01 / Performance & Slot-assignment p95 at most one second. & Must / Test \\
+NFR-02 / Availability & Availability during operating hours at least 99.5\%. & Must / Analysis \\
+NFR-03 / Usability & New attendants handle a lost ticket within two minutes after 20 minutes of training. & Should / Demonstration \\
+NFR-04 / Security & Encrypt 100\% of PII fields at rest and in transit; target AES-256 / TLS 1.2+. & Must / Inspection \\
+NFR-05 / Scalability & Support growth in floors and slots; metric and target are missing. & Could / Analysis \\
+NFR-06 / Safety & All barriers open within five seconds of an evacuation trigger. & Must / Test \\
+\end{longtable}\endgroup

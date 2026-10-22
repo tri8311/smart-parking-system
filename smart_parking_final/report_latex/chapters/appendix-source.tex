@@ -1,0 +1,19 @@
+\chapter[Appendix: Source Code]{Source Code and Reproducibility}
+\section{Source Snapshot}
+The \texttt{source/} directory contains unmodified copies of the project's five Python files. The \texttt{evidence/manifest.json} file records SHA-256 hashes of the source and workbook, allowing the code used for verification to be checked. Comments starting with \texttt{ponytail:} mark deliberate simplifications and name their known limit. The following excerpts are extracted automatically from that snapshot rather than rewritten to improve the reported outcomes.
+\input{generated/source-index}
+\section{Core Code Excerpts}
+\input{generated/snippets}
+\clearpage
+\section{Compilation and Reproduction}
+Compile \texttt{main.tex} three times with XeLaTeX (or run \texttt{build.ps1}) to update the contents, figure list, and references. Figures are drawn directly in LaTeX with TikZ, so rendering them needs no external service or network connection. Font fallbacks support Overleaf.
+
+Reproducing the evidence requires Python and \texttt{openpyxl}. Run the following from the report directory:
+\par\noindent\begin{minipage}{\linewidth}
+\begin{Verbatim}[fontsize=\small,frame=single]
+python refresh_evidence.py
+xelatex -interaction=nonstopmode -halt-on-error main.tex
+xelatex -interaction=nonstopmode -halt-on-error main.tex
+xelatex -interaction=nonstopmode -halt-on-error main.tex
+\end{Verbatim}
+\end{minipage}\par\medskip\noindent The first command refreshes generated tables and measurements; timing values may vary by machine. It does not write to the original project workbook. Detailed instructions, directory layout, and editable cover fields are described in the accompanying \texttt{README.md}.

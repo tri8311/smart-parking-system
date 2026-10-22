@@ -1,0 +1,28 @@
+\par\begingroup\scriptsize\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.24000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.11000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.65000\linewidth-2\tabcolsep\relax}}
+\caption{Complete sheet and schema index}\\
+\toprule
+\textbf{Sheet} & \textbf{Rows} & \textbf{Fields} \\ \midrule
+\endfirsthead
+\multicolumn{3}{l}{\small\itshape Complete sheet and schema index (continued)}\\
+\toprule
+\textbf{Sheet} & \textbf{Rows} & \textbf{Fields} \\ \midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\scriptsize Continued on the next page}\\
+\endfoot
+\bottomrule\endlastfoot
+project & 1 & name, code, organization, author, version, date, description, standard, domain, confidentiality \\
+stakeholders & 5 & id, name, role, organization, influence, interest, contact, notes \\
+requirements & 31 & id, title, description, type, priority, status, source, rationale, acceptance\_criteria, verification\_method, complexity, dependencies, tags \\
+nfrs & 6 & id, title, category, description, metric, target\_value, priority, rationale, verification\_method \\
+actors & 11 & id, name, description, is\_primary \\
+use\_cases & 22 & id, title, primary\_actor, goal, preconditions, main\_flow, alternative\_flows, postconditions, trigger, frequency, related\_requirements \\
+change\_requests & 2 & id, title, description, requested\_by, date\_submitted, status, impact\_analysis, affected\_requirements, cost\_impact\_days, schedule\_impact\_days, decision\_rationale \\
+hazards & 12 & id, hazard, cause, effect, severity, likelihood, sil, mitigation, related\_requirements \\
+elicitation\_sessions & 5 & id, technique, date, participants, objective, findings, requirements\_derived \\
+tools & 3 & id, name, category, purpose, strengths, limitations \\
+process\_activities & 6 & id, phase, activity, inputs, outputs, roles, duration\_days \\
+test\_cases & 67 & id, title, related\_requirements, type, priority, preconditions, steps, expected\_result, status, actual\_result, executed\_by, executed\_date \\
+test\_case\_analysis & 156 & id, test\_case\_id, source\_type, source\_id, coverage\_type, notes \\
+\end{longtable}\endgroup

@@ -1,0 +1,66 @@
+\par\begingroup\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.13000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.25000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.62000\linewidth-2\tabcolsep\relax}}
+\caption{System actors}\\
+\toprule
+\textbf{ID} & \textbf{Name} & \textbf{Role} \\ \midrule
+\endfirsthead
+\multicolumn{3}{l}{\small\itshape System actors (continued)}\\
+\toprule
+\textbf{ID} & \textbf{Name} & \textbf{Role} \\ \midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\scriptsize Continued on the next page}\\
+\endfoot
+\bottomrule\endlastfoot
+ACT-01 & Driver & A person who parks a vehicle and pays the fee. \\
+ACT-02 & Gate Attendant & Staff who assist drivers at the gates and handle lost tickets. \\
+ACT-03 & Parking Administrator & Manages lot structure, zones and system configuration. \\
+ACT-04 & Payment Gateway & External online payment service. \\
+ACT-05 & Entry Camera & Camera at the entry gate that captures plate images. \\
+ACT-06 & Slot Sensor & Sensor in each slot that reports whether a vehicle is present. \\
+ACT-07 & Fire Alarm & Building fire alarm that can start an evacuation automatically. \\
+ACT-08 & Parking Manager & Reviews revenue and audit data and handles escalations. \\
+ACT-09 & Charging Station & Charger that reports the energy delivered to an EV. \\
+ACT-10 & Central Server & Back-office server for reservations, passes and online payments; may be unreachable. \\
+ACT-11 & Exit Camera & Camera at the exit gate that captures plate images. \\
+\end{longtable}\endgroup
+\par\needspace{8\baselineskip}\begingroup\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.24000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.42000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.34000\linewidth-2\tabcolsep\relax}}
+\caption{Tools listed in the source dataset}\\
+\toprule
+\textbf{ID / name} & \textbf{Purpose} & \textbf{Limitations} \\ \midrule
+\endfirsthead
+\multicolumn{3}{l}{\small\itshape Tools listed in the source dataset (continued)}\\
+\toprule
+\textbf{ID / name} & \textbf{Purpose} & \textbf{Limitations} \\ \midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\scriptsize Continued on the next page}\\
+\endfoot
+\bottomrule\endlastfoot
+TL-01 Jira & Track requirements as backlog items. & Requires discipline to keep in sync with SRS. \\
+TL-02 PlantUML / Mermaid & Render use-case, state and data-flow diagrams from text. & Limited layout control for large diagrams. \\
+TL-03 SPS terminal tool (parking.py) & Load this dataset, check quality, trace, simulate and test requirements. & Terminal only; not multi-user. \\
+\end{longtable}\endgroup
+\subsection*{Test-case source analysis}\noindent The workbook holds 156 links between tests and sources (requirements, use cases, flows, NFRs, and change requests); they are summarized here and listed row by row in \texttt{data/dataset.json}.\par
+\par\needspace{10\baselineskip}\begingroup\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.30000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.15000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.20000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.35000\linewidth-2\tabcolsep\relax}}
+\caption{Test-case source analysis summary}\label{tab:tca-summary}\\
+\toprule
+\textbf{Source type} & \textbf{Links} & \textbf{Distinct sources} & \textbf{Positive / Negative / Boundary} \\ \midrule
+\endfirsthead
+\multicolumn{4}{l}{\small\itshape Test-case source analysis summary (continued)}\\
+\toprule
+\textbf{Source type} & \textbf{Links} & \textbf{Distinct sources} & \textbf{Positive / Negative / Boundary} \\ \midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\scriptsize Continued on the next page}\\
+\endfoot
+\bottomrule\endlastfoot
+CR & 2 & 2 & 2 / 0 / 0 \\
+FR & 64 & 31 & 34 / 21 / 9 \\
+Flow & 65 & 44 & 32 / 31 / 2 \\
+NFR & 3 & 3 & 1 / 0 / 2 \\
+UseCase & 22 & 21 & 22 / 0 / 0 \\
+\end{longtable}\endgroup
+\noindent All fields from every sheet are available in \texttt{data/dataset.json}; the workbook snapshot is \texttt{data/parking\_data.xlsx}.

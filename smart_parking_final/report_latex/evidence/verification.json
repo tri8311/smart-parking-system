@@ -1,0 +1,484 @@
+{
+  "generated_at": "2026-10-20T00:24:53.968899+07:00",
+  "python": "3.14.6",
+  "os": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "execution": "Sequential, single Python process",
+  "dataset": {
+    "project": 1,
+    "stakeholders": 5,
+    "requirements": 31,
+    "nfrs": 6,
+    "actors": 11,
+    "use_cases": 22,
+    "change_requests": 2,
+    "hazards": 12,
+    "elicitation_sessions": 5,
+    "tools": 3,
+    "process_activities": 6,
+    "test_cases": 67,
+    "test_case_analysis": 156
+  },
+  "test_summary": {
+    "Passed": 67
+  },
+  "tests": {
+    "TC-01": [
+      "Passed",
+      "Ticket issued; slot A1 assigned.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-02": [
+      "Passed",
+      "Entry rejected ('zone full'); rejection logged.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-03": [
+      "Passed",
+      "Fee = 30000 VND.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-04": [
+      "Passed",
+      "p95 = 2.332 ms over 1000 requests.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-05": [
+      "Passed",
+      "Other car got A2; VIP-1 got A1.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-06": [
+      "Passed",
+      "Found: Smart Parking > F1 > A > A2.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-07": [
+      "Passed",
+      "CR-01 implemented: 17:00-18:00 charged 15000 VND (1.5 x 10000).",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-08": [
+      "Passed",
+      "PermissionError raised; denial logged.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-09": [
+      "Passed",
+      "Car assigned C1 (zone A blocked).",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-10": [
+      "Passed",
+      "Charged 290000 VND (24h x 10000 + 50000).",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-11": [
+      "Passed",
+      "Plate 29A-111 accepted at 95% confidence.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-12": [
+      "Passed",
+      "55% confidence: manual entry requested and accepted.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-13": [
+      "Passed",
+      "Manual entry required; camera_offline logged.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-14": [
+      "Passed",
+      "Assigned B1 (10 m), not A1 (40 m).",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-15": [
+      "Passed",
+      "Zone B locked: assigned A1.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-16": [
+      "Passed",
+      "Alerts: missing_vehicle, unauthorized_vehicle.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-17": [
+      "Passed",
+      "B2 blocked on silence, freed on recovery.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-18": [
+      "Passed",
+      "29A-111 parked 25 h in A1 (limit 24 h)",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-19": [
+      "Passed",
+      "Barriers open; entry rejected; exit charged 0 VND.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-20": [
+      "Passed",
+      "PermissionError raised; denial logged.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-21": [
+      "Passed",
+      "Evacuation started by fire alarm; barriers open.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-22": [
+      "Passed",
+      "Barriers open in 0.404 ms (500 cars parked).",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-23": [
+      "Passed",
+      "Fee = 25000 VND (10000 + 15000).",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-24": [
+      "Passed",
+      "3rd car base fee; 4th car (100% occupancy) 12500 VND = 125% of 10000.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-25": [
+      "Passed",
+      "Failed payment: slot stays occupied; after payment the slot is free.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-26": [
+      "Passed",
+      "Exit refused: ticket not found.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-27": [
+      "Passed",
+      "5th reservation rejected (4 car slots reserved).",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-28": [
+      "Passed",
+      "A1 released at 10:46.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-29": [
+      "Passed",
+      "Plate NOPE: vehicle not found.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-30": [
+      "Passed",
+      "A1 occupied after lock; blocked after exit.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-31": [
+      "Passed",
+      "no entry record: escalate to the Parking Manager.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-32": [
+      "Passed",
+      "Exit refused; refusal logged.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-33": [
+      "Passed",
+      "admin1 logged in with role admin.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-34": [
+      "Passed",
+      "Login rejected; failed attempts: 1.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-35": [
+      "Passed",
+      "account locked (correct password refused after 3 failures).",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-36": [
+      "Passed",
+      "A1 released and assigned to the next car.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-37": [
+      "Passed",
+      "Cancel NOPE: reservation not found.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-38": [
+      "Passed",
+      "Car A pays 10000; car B pays 12000.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-39": [
+      "Passed",
+      "Zone D added; the next car got D1.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-40": [
+      "Passed",
+      "Both attempts denied.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-41": [
+      "Passed",
+      "A 0/2, F1 2/4, lot 4/6 free.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-42": [
+      "Passed",
+      "Zones {'A': 20000, 'C': 10000} = floors {'F1': 20000, 'F2': 10000} = total 30000.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-43": [
+      "Passed",
+      "Audit events: entry, payment, exit.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-44": [
+      "Passed",
+      "Barriers closed, slots unblocked, new entry accepted.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-45": [
+      "Passed",
+      "Reservation cancelled; A1 blocked.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-46": [
+      "Passed",
+      "Zone A shows 0 free slots.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-47": [
+      "Passed",
+      "Revenue 0, 0 payments.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-48": [
+      "Passed",
+      "15 min = 0 VND; 16 min = 10000 VND.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-49": [
+      "Passed",
+      "24 h = 100000 VND (cap); 25 h = 110000 VND.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-50": [
+      "Passed",
+      "ticket fee 5000 VND (was 20000); exit charged 5000; logged: override_requested, override_approved",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-51": [
+      "Passed",
+      "rejected: override needs a non-negative amount and a reason; manager rejects OV-1: fee stays 20000 VND; attendant approval denied: manager or admin only",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-52": [
+      "Passed",
+      "Monthly pass: 5 h stay costs 0 VND.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-53": [
+      "Passed",
+      "VIP holder: V1; monthly holder: A1; ordinary car: A2.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-54": [
+      "Passed",
+      "Expired pass: expiry logged, fee 20000 VND.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-55": [
+      "Passed",
+      "pass stored; logged: pass_added (monthly until 2026-11-16); MON-1 removed; removal logged",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-56": [
+      "Passed",
+      "rejected: invalid pass (kind monthly|vip, end date in the future); invalid pass (kind monthly|vip, end date in the future); attendant denied: administrator only; refused: pass registration needs the central server (offline mode)",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-57": [
+      "Passed",
+      "EVs got E1 and E2; third EV rejected; the car got A1.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-58": [
+      "Passed",
+      "Fee 59000 VND (24000 parking + 35000 energy).",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-59": [
+      "Passed",
+      "0 kWh and a car reading were rejected.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-60": [
+      "Passed",
+      "Matching plate: vehicle left.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-61": [
+      "Passed",
+      "Mismatch: exit refused, slot still occupied, mismatch logged.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-62": [
+      "Passed",
+      "attendant approves: vehicle leaves (10000 VND), approval logged; unreadable plate: barrier stays closed; a guest cannot approve",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-63": [
+      "Passed",
+      "Offline: entry and cash exit worked; 3 records marked.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-64": [
+      "Passed",
+      "online refused: payment gateway unavailable: pay cash or card at the booth; slot Occupied; refused offline: reservation needs the central server (offline mode); pass registration needs the central server (offline mode)",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-65": [
+      "Passed",
+      "1 record synchronized; marks cleared; count logged.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-66": [
+      "Passed",
+      "evacuation offline: barriers OPEN, exit free of charge",
+      "SPS terminal tool",
+      "2026-10-20"
+    ],
+    "TC-67": [
+      "Passed",
+      "Barrier stayed open with a vehicle present, a sensor fault, and power loss (3 refusals logged); closed when clear.",
+      "SPS terminal tool",
+      "2026-10-20"
+    ]
+  },
+  "nfr": {
+    "NFR-01": "PASS: p95 = 0.928 ms over 1000 requests (target <= 1 second)",
+    "NFR-02": "PASS: 99.98% uptime, 7 min down in 30 days (target >= 99.5%; modeled outages)",
+    "NFR-06": "PASS: barriers open in 0.346 ms with 500 cars parked (target <= 5 seconds)"
+  },
+  "quality": [
+    [
+      "ERROR",
+      "REQ-07",
+      "missing acceptance criteria"
+    ],
+    [
+      "ERROR",
+      "NFR-05",
+      "not measurable: metric or target value missing"
+    ],
+    [
+      "WARN",
+      "REQ-07",
+      "not atomic: description joins several actions (split into separate requirements)"
+    ],
+    [
+      "WARN",
+      "REQ-10",
+      "not atomic: description joins several actions (split into separate requirements)"
+    ],
+    [
+      "INFO",
+      "REQ-07",
+      "Must requirement still Proposed (needs approval)"
+    ],
+    [
+      "INFO",
+      "REQ-10",
+      "Must requirement still Proposed (needs approval)"
+    ],
+    [
+      "INFO",
+      "REQ-15",
+      "Must requirement still Proposed (needs approval)"
+    ]
+  ],
+  "hazard_demos": {
+    "HZ-02": "OK: fee boundaries 0/15/16/60/61 min and mixed UTC offsets correct; manual override only with manager approval",
+    "HZ-03": "OK: A1 cannot be assigned twice; next request gets A2",
+    "HZ-04": "OK: close_gate keeps the barrier open on sensor fault or vehicle present, closes it otherwise",
+    "HZ-05": "OK: account locked after 3 failed logins; attendant cannot lock zones",
+    "HZ-06": "OK: read at 79% needs manual entry, read at 80% accepted",
+    "HZ-07": "OK: barriers open on evacuation or power loss; exit needs no payment",
+    "HZ-08": "OK: silent sensor blocks the slot; unticketed vehicle alerted",
+    "HZ-09": "OK: worst case 1 h peak + surcharge = 18750 VND (< 2 x base)",
+    "HZ-10": "OK: exit with a different plate stays closed until an attendant approves",
+    "HZ-11": "OK: entry and cash exit work offline; 3 records synchronized afterwards",
+    "HZ-12": "OK: an attendant cannot approve; the denial is audited and the fee is unchanged"
+  }
+}

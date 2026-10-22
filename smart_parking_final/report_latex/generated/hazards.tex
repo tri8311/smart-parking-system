@@ -1,0 +1,27 @@
+\par\begingroup\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr 0.22000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.10000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.08000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.38000\linewidth-2\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.22000\linewidth-2\tabcolsep\relax}}
+\caption{Hazard register and mitigation scope (ordered by R)}\label{tab:hazards}\\
+\toprule
+\textbf{ID / hazard} & \textbf{S / L / R} & \textbf{SIL} & \textbf{Mitigation and limitations} & \textbf{Traceability} \\ \midrule
+\endfirsthead
+\multicolumn{5}{l}{\small\itshape Hazard register and mitigation scope (ordered by R) (continued)}\\
+\toprule
+\textbf{ID / hazard} & \textbf{S / L / R} & \textbf{SIL} & \textbf{Mitigation and limitations} & \textbf{Traceability} \\ \midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\scriptsize Continued on the next page}\\
+\endfoot
+\bottomrule\endlastfoot
+HZ-06 Plate misrecognition & 3 / 3 / 9 & SIL-1 & 80\% threshold; manual fallback; confidence is simulated. & REQ-11 \\
+HZ-11 Network loss stops gates & 3 / 3 / 9 & SIL-1 & Local entry/exit, marked logs; actual network synchronization is absent. & REQ-29; REQ-30; NFR-02 \\
+HZ-01 Owner data exposure & 4 / 2 / 8 & SIL-2 & Encrypt backups and restrict access; no encryption evidence. & NFR-04 \\
+HZ-02 Incorrect fees & 2 / 3 / 6 & QM & Test time/time-zone boundaries; overrides need manager approval. & REQ-03; REQ-22 \\
+HZ-03 Duplicate slot assignment & 2 / 3 / 6 & QM & Reject repeated Occupied transitions; concurrent races are unverified. & REQ-01 \\
+HZ-05 Unauthorized zone changes & 3 / 2 / 6 & SIL-1 & Authenticate, lock after three failures, and restrict to admin. & REQ-18; REQ-09 \\
+HZ-08 Missing/incorrect sensor data & 2 / 3 / 6 & QM & Reconcile with tickets, alert, and block faulty slots. & REQ-13 \\
+HZ-10 Exit with another ticket & 3 / 2 / 6 & SIL-1 & Compare exit and ticket plates; approval and logging on mismatch. & REQ-26 \\
+HZ-12 Override abuse & 2 / 3 / 6 & QM & Separate request/approval roles; enforce distinct user identities in future. & REQ-22 \\
+HZ-04 Barrier strikes a vehicle & 4 / 1 / 4 & SIL-2 & The gate refuses to close on a vehicle, a sensor fault, or power loss (REQ-31); no physical interlock is tested. & NFR-02; REQ-31 \\
+HZ-07 Evacuation barriers fail to open & 4 / 1 / 4 & SIL-2 & Fail-open and payment bypass; physical and power-loss tests are needed. & REQ-15; NFR-06 \\
+HZ-09 Excessive dynamic fees & 2 / 2 / 4 & QM & Fixed multipliers 1.5 x 1.25; show breakdown; clarify the cap. & REQ-16; REQ-17; REQ-28 \\
+\end{longtable}\endgroup

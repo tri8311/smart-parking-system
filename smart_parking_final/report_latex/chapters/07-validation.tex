@@ -1,0 +1,31 @@
+\chapter{Validation, Verification \& Change Management}
+\section{Requirements Traceability Matrix}
+\input{generated/coverage}
+\input{generated/trace}
+Here, 100\% coverage means that each functional requirement has at least one use-case link and one test-case link. It does not mean every clause is tested, every branch is executed, or stakeholders have approved the requirement. REQ-07, in particular, still lacks acceptance criteria despite having simulation tests.
+
+Dependencies form a directed graph, and a requirement may have multiple parents. The tool displays that graph as a tree, so an identifier can appear more than once. Impact analysis uses sets to avoid duplicate counting. The current dataset version has no general-purpose dependency-cycle validation.
+
+\section{Automated Test Results}
+\subsection{Scope and Method}
+The runner maps TC-01 through TC-67 to functions in \texttt{checks.py}. Each function operates on separate simulation objects and checks outcomes with assertions. The report calls \texttt{checks.run\_tests(data)} directly rather than invoking workbook write-back. The original data is preserved, and the resulting execution snapshot is stored under \texttt{evidence/}.
+\input{generated/test-summary}
+The tests cover normal operation, capacity shortages, authorization, fee boundaries, camera failures, sensors, evacuation, monthly/VIP passes, EVs, exit-plate verification, and offline behavior. Important boundaries include the 15/16-minute grace period, 24/25-hour cap, 79/80\% recognition confidence, and the failed-login count that triggers lockout.
+Table~\ref{tab:tests} lists every test with its recorded result. NFR-01 and NFR-06 timings quoted there come from the test run and differ slightly from Table~\ref{tab:nfr-results}, which comes from a separate measurement run; both vary with the machine.
+\input{generated/tests}
+
+\subsection{Requirements Data Quality Assessment}
+\input{generated/quality}
+The two ERROR findings concern specification and measurement data; they remain even when every test is Passed. Atomicity warnings use a comma-and-conjunction heuristic and require analyst review. INFO findings identify Must requirements that remain Proposed, so business approval is needed before establishing an official baseline.
+
+Further specification/implementation gaps include the lost-ticket rule versus the daily cap, calls to \texttt{exit} without an observed plate, zone locks before and after evacuation, and persistence of dynamically added zones. Reporting these gaps does not change the project's source code.
+
+\section{Requirements Change Management}
+The proposed process records a CR, identifies directly affected requirements, calculates dependency closure, reviews use cases/tests/risks, estimates effort, obtains a decision, updates the baseline, and runs regression tests. The status \emph{Implemented} in the workbook means the change was applied in the simulation, not accepted on a real installation.
+\input{generated/changes}
+CR-01 adds peak-hour and occupancy pricing. Regression should include grace periods, passes, and revenue recording because they share fee calculation. CR-02 adds EV allocation and charging and has broad impact through the original allocation dependency. The returned impact set is a conservative review aid; final regression priorities and scope still require business interpretation.
+
+\section{Chapter Conclusion}
+The recorded execution shows the existing suite passing on the simulation, while traceability identifies the scope of changes. Specification quality, approval, and behavioral coverage require separate assessment. A passing-test percentage cannot replace requirements validation.
+
+The suite contains 67 automated tests and all 67 pass; every functional requirement links to at least one use case and one test (Table~\ref{tab:coverage}). The quality checker still reports two errors, two warnings, and three informational findings, which no test can remove, because they concern the wording of requirements and not the behavior of the code. The impact of the two change requests was computed through the dependency tree (Table~\ref{tab:changes}), and both are marked Implemented in the simulation. That status does not mean acceptance on a real installation. Validation by real stakeholders is the missing step.

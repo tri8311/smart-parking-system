@@ -1,0 +1,43 @@
+\chapter{Safety-Critical Systems, RE Tooling \& Integration}
+\section{Safety Risk Analysis}
+Each hazard records a cause, consequence, severity S, and likelihood L. This report uses $R=S\times L$ to prioritize review within the sample dataset. S has four levels and L has three; the workbook does not quantify the meaning of each level, so scores support only internal case-study comparisons.
+\input{generated/risk-grid}
+\input{generated/hazards}
+SIL-1, SIL-2, and QM labels are preserved for source traceability. The \texttt{sil\_rule} function derives a label from severity alone. This is an educational convention, and there is no analysis or evidence supporting a claim of certified safety integrity. PII exposure, fraud, and revenue discrepancies also appear in the hazard register despite differing from physical injury risks.
+
+The simulated policy keeps a barrier open on sensor failure, vehicle presence, or power loss. Separately, evacuation bypasses payment and blocks new tickets. REQ-31 makes this explicit: \texttt{close\_gate} calls \texttt{close\_barrier} and refuses to close on a vehicle, a sensor fault, or power loss (TC-67). The logic is not connected to hardware, so no physical interlock is demonstrated; HZ-04 is therefore covered by a requirement and a software test only. HZ-01 encryption has no verification demonstration. Other hazards have logical demonstrations, but HZ-03 has not been tested under concurrent allocation.
+
+REQ-22 separates roles: an attendant requests an override, and a manager or administrator approves it. The code checks roles, not identities, so one person holding both roles could request and approve an override. This limitation matters if the mechanism is used operationally.
+
+\section{Integrated Requirements Management Tool}
+\begin{table}[H]\centering\small\caption{Modules and responsibilities}
+\begin{tabularx}{\linewidth}{L{28mm}X}\toprule
+File & Responsibility\\\midrule
+\texttt{parking.py} & Entry point, menus, interactive mode, and Markdown appendix export.\\
+\texttt{rm.py} & Excel loading, quality checks, traceability, dependencies, CR impact, risk matrices, and Mermaid export.\\
+\texttt{sim.py} & Lot hierarchy, tickets, states, pricing, authorization, sensors, evacuation, and persistence.\\
+\texttt{checks.py} & 22 use-case scenarios, 67 tests, NFR measurements, and hazard-mitigation demonstrations.\\
+\texttt{live.py} & Seven end-to-end gate scenarios using interactive input or default answers.\\\bottomrule
+\end{tabularx}\end{table}
+The workflow starts with Excel, applies data checks and traceability, and executes scenarios on the simulation to collect results. The tool exports Markdown and Mermaid. This report turns the dataset into LaTeX tables and figures with execution evidence. Jira and PlantUML/Mermaid are listed as reference tools in the workbook; no actual Jira connection is evidenced.
+
+\begin{Verbatim}[fontsize=\small,frame=single]
+python parking.py
+python parking.py all
+\end{Verbatim}
+The first command opens the menu. The \texttt{all} command runs feature groups, writes test results to the workbook, and exports \texttt{out/report\_appendix.md}. Use a copy when demonstrating it if the baseline must remain unchanged. Interactive mode saves \texttt{state.json}; dynamically added zones are not fully reconstructed after restart.
+
+\subsection*{Sample Tool Output}
+The quality check (menu item 2) produced the following findings on the report dataset. The traceability and change-impact outputs are reproduced in Tables~\ref{tab:trace} and~\ref{tab:changes}.
+\VerbatimInput[fontsize=\scriptsize,frame=single]{evidence/quality.txt}
+
+\section{Simulation \& End-to-end Testing}
+\input{generated/e2e}
+The simulated day begins with two cars and a motorcycle and includes low-confidence recognition, a reservation no-show, zone locking, a sensor mismatch, and lost-ticket handling. Logs are produced by the existing code. Labels such as ALPR CAM, PAYMENT, and CHARGER are console labels, not evidence of connections to corresponding equipment.
+\input{generated/day}
+The seven live scenarios add entry/exit, reservation-to-exit journeys, evacuation, ticket swapping, network loss, and EV/monthly-pass operation. Complete output is stored in \texttt{evidence/live\_runs.txt}. Default responses provide repeatable execution and do not introduce new survey data.
+
+\section{Chapter Conclusion}
+The tool connects requirement data, models, and experiments in an inspectable workflow. Safety analysis illustrates evacuation priority while identifying the need to validate hardware, interlocks, security, and concurrent data handling before deployment.
+
+The workflow runs from the workbook through quality checks, traceability, change impact, the 22 use-case scenarios, 67 tests, and seven live gate scenarios, and it writes the test results back to the workbook so that the evidence can be inspected. Of the 12 hazards, HZ-04 gained a requirement (REQ-31) and a software test (TC-67) during this work, but no physical interlock is demonstrated. HZ-01 has no encryption demonstration and HZ-03 has no concurrent-allocation test. Override approval checks roles, not identities. These limits define the work that remains before any real deployment.

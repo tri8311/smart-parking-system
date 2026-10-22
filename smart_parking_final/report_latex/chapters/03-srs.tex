@@ -1,0 +1,39 @@
+\chapter{Requirements Specification \& Documentation (SRS)}
+\section{Functional Requirements}
+\subsection{Conventions and System Boundary}
+Table~\ref{tab:functional} restates each requirement in plain English as the required behavior plus an acceptance interpretation. Workbook identifiers are retained for traceability; the original wording, complexity, sources, dependencies, and statuses are in \texttt{data/dataset.json}. Proposed specification corrections are identified separately and do not modify the workbook.
+
+External actors provide plate numbers, sensor readings, staff commands, or fire-alarm signals. The simulation manages slots, tickets, and transactions; opening a barrier changes a software state variable. Successful business workflows do not establish hardware accuracy or resistance to real-world fraud.
+\clearpage
+\input{generated/functional}
+
+\subsection{Pricing Rules and Order of Application}
+Sample rates per started hour are 10,000 VND for cars, 3,000 VND for motorcycles, and 12,000 VND for EVs. Charging costs 3,500 VND/kWh. Time is evaluated in UTC+7. Each started hour is anchored to the entry time rather than aligned to clock-hour boundaries.
+
+Let $\Delta t$ denote the stay in hours, $r$ the rate recorded on the ticket, $n=\lceil\Delta t\rceil$, and $m_i$ a multiplier of 1.5 when the start of hour $i$ falls within [07:00,09:00) or [17:00,19:00), and 1 otherwise. For a stay longer than 15 minutes without a monthly/VIP pass, the simulated parking fee is:
+\begin{equation}
+F_{\mathrm{parking}}=\left\lfloor s\sum_{d=0}^{\lceil n/24\rceil-1}\min\left(10r,\sum_{i=24d}^{\min(24d+23,n-1)} r m_i\right)\right\rfloor .
+\end{equation}
+Here $s=1.25$ when occupied or reserved slots of the vehicle type exceed 80\% at ticket issuance; otherwise $s=1$. The current code calculates occupancy after marking the arriving vehicle's slot Occupied. The $10r$ cap is applied before the surcharge, in 24-hour blocks measured from entry. Consequently, the cap after surcharge can reach $12.5r$. This ordering requires explicit agreement when approving REQ-17 and REQ-28.
+
+The parking component is zero for stays of at most 15 minutes or for a valid monthly/VIP pass recorded at entry. Energy charges still apply. The normal total is:
+\begin{equation}
+F_{\mathrm{total}}=F_{\mathrm{parking}}+\operatorname{round}(3500E),
+\end{equation}
+where $E$ is the total energy delivered in kWh. An approved override replaces the entire total. During evacuation, exit costs zero and bypasses payment checks. The grace period is not deducted from a stay once the stay exceeds 15 minutes.
+
+For example, a car entering at 16:20 and leaving at 19:05 has three started hours at 16:20, 17:20, and 18:20. They cost 10,000, 15,000, and 15,000 VND, giving 40,000 VND without an occupancy surcharge. An EV parked for two off-peak hours and charged with 10 kWh costs 59,000 VND. These examples can be checked against \texttt{live.py} and TC-58.
+
+\subsection{Specification Issues to Resolve}
+REQ-07 lacks acceptance criteria and combines lookup, charging, logging, notification, and receipt printing. It should be split into child requirements. Minimum acceptance conditions should cover finding the ticket by plate, refusing exit without ownership evidence, recording a timestamped incident, and collecting the approved fee. The code currently charges $24r+50{,}000$ VND for a lost ticket, while REQ-28 defines a daily cap of $10r$ before surcharge. The business owner must clarify the phrase ``maximum daily fee'' in REQ-07 before acceptance.
+
+The tool flags REQ-10 as potentially non-atomic using a string-based heuristic. Logging could be normalized into three event-specific requirements beneath one parent. In addition, exit can skip plate checking when \texttt{seen} is \texttt{None}. Missing input must be distinguished from a camera explicitly returning an unreadable plate. Tests of the mismatch branch do not establish that every call requires plate verification.
+
+\section{Non-functional Requirements}
+\input{generated/nfr-spec}
+These targets describe required system properties. NFR-04 encryption is not implemented in the prototype: demonstration passwords are plaintext in memory, workbook and JSON files are unencrypted, and no actual TLS channel exists. NFR-05 lacks both a metric and a threshold, preventing acceptance. Chapter 6 separates measurements, simulation analysis, and unverified targets.
+
+\section{Chapter Conclusion}
+The SRS covers the main business capabilities and gives verification conditions for most requirements. Pricing, evacuation priority, and data-state rules must be agreed before real deployment. The REQ-07 and NFR-05 defects remain visible so that baseline quality is reported transparently.
+
+Three decisions need attention. The fee rules apply the daily cap before the occupancy surcharge, so the effective cap can reach $12.5r$ rather than $10r$; the business owner must approve this ordering. The lost-ticket rule ($24r+50{,}000$ VND) must be reconciled with the daily cap in REQ-28 and with REQ-07. Finally, NFR-04 encryption is specified but not implemented in the prototype, and NFR-05 has neither metric nor threshold. These items return in Chapters~6 and~7 as verification limits and as quality findings.

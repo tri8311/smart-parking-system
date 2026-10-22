@@ -1,0 +1,67 @@
+\tikzset{ucs/.style={uc,text width=21mm},lbl/.style={font=\tiny,fill=white,inner sep=1pt}}
+\widefigure{\begin{tikzpicture}[x=1cm,y=1cm]
+\node[ext] (driver) at (0.5,-6) {Driver};
+\node[ucs] (u01) at (5.4,0) {UC-01\\Vehicle entry};
+\node[ucs] (u18) at (5.4,-2) {UC-18\\Pass / VIP entry};
+\node[ucs] (u20) at (5.4,-4) {UC-20\\EV charging};
+\node[ucs] (u03) at (5.4,-6) {UC-03\\Reserve slot};
+\node[ucs] (u13) at (5.4,-8) {UC-13\\Cancel reservation};
+\node[ucs] (u04) at (5.4,-10) {UC-04\\Locate vehicle};
+\node[ucs] (u15) at (5.4,-12) {UC-15\\View availability};
+\node[ucs] (u07) at (10.6,0) {UC-07\\Read plate};
+\node[ucs] (u08) at (10.6,-2) {UC-08\\Nearest slot};
+\node[ext] (cam) at (15.8,0) {Entry Camera};
+\node[ext] (charger) at (15.8,-4) {Charging Station};
+\foreach \u in {u01,u18,u20,u03,u13,u04,u15} \draw (driver)--(\u);
+\draw (cam)--(u07);\draw (charger)--(u20);
+\draw[arr,dashed] (u01)--node[lbl]{include}(u07);
+\draw[arr,dashed] (u01)--node[lbl,pos=.3]{include}(u08);
+\draw[arr,dashed] (u18)--node[lbl,pos=.75]{include}(u07);
+\draw[arr,dashed] (u20)--node[lbl,pos=.55]{include}(u08);
+\draw[arr,dashed] (u18)--node[lbl]{extend}(u01);
+\begin{scope}[on background layer]\node[draw=muted,dashed,fit=(u01)(u15)(u07)(u08),inner sep=5mm,label={[font=\small]above:SPS -- Entry, reservation, and information}] {};\end{scope}
+\end{tikzpicture}}{Driver use cases around entry, reservation, and information (UC-01, 03, 04, 07, 08, 13, 15, 18, 20)}{fig:uc-driver}
+
+\widefigure{\begin{tikzpicture}[x=1cm,y=1cm]
+\node[ext] (driver) at (0.5,0) {Driver};
+\node[ext] (pay) at (0.5,-3) {Payment Gateway};
+\node[ucs] (u02) at (5.4,0) {UC-02\\Exit and pay};
+\node[ucs] (u12) at (5.4,-4) {UC-12\\Log in};
+\node[ucs] (u21) at (10.6,2) {UC-21\\Verify exit plate};
+\node[ucs] (u11) at (10.6,0) {UC-11\\Dynamic fee};
+\node[ucs] (u06) at (10.6,-2) {UC-06\\Lost ticket};
+\node[ucs] (u17) at (10.6,-4) {UC-17\\Override fee};
+\node[ext] (xcam) at (15.8,2) {Exit Camera};
+\node[ext] (att) at (15.8,-2) {Gate Attendant};
+\node[ext] (mgr) at (15.8,-4) {Parking Manager};
+\draw (driver)--(u02);\draw (pay)--(u02);\draw (xcam)--(u21);
+\draw (att)--(u06);\draw (att)--(u17);\draw (mgr)--(u17);\draw (mgr)--(u06);
+\draw[arr,dashed] (u02)--node[lbl]{include}(u21);
+\draw[arr,dashed] (u11)--node[lbl]{extend}(u02);
+\draw[arr,dashed] (u06)--node[lbl,pos=.4]{extend}(u02);
+\draw[arr,dashed] (u17)--node[lbl,pos=.3]{extend}(u02);
+\draw[arr,dashed] (u17)--node[lbl]{include}(u12);
+\begin{scope}[on background layer]\node[draw=muted,dashed,fit=(u02)(u12)(u21)(u17),inner sep=5mm,label={[font=\small]above:SPS -- Exit and payment}] {};\end{scope}
+\end{tikzpicture}}{Exit, payment, and exceptional fee handling (UC-02, 06, 11, 12, 17, 21)}{fig:uc-exit}
+
+\widefigure{\begin{tikzpicture}[x=1cm,y=1cm]
+\node[ext] (admin) at (0.5,-2.25) {Administrator};
+\node[ext] (mgr) at (0.5,-6) {Parking Manager};
+\node[ext] (att) at (0.5,-8.25) {Gate Attendant};
+\node[ucs] (u10) at (5.4,0) {UC-10\\Evacuation};
+\node[ucs] (u05) at (5.4,-1.5) {UC-05\\Lock zone};
+\node[ucs] (u14) at (5.4,-3) {UC-14\\Configure lot};
+\node[ucs] (u19) at (5.4,-4.5) {UC-19\\Register pass};
+\node[ucs] (u16) at (5.4,-6) {UC-16\\Report};
+\node[ucs] (u22) at (5.4,-7.5) {UC-22\\Work offline};
+\node[ucs] (u09) at (5.4,-9) {UC-09\\Monitor slots};
+\node[ucs] (u12) at (10.6,-3.75) {UC-12\\Log in};
+\node[ext] (fire) at (15.8,0) {Fire Alarm};
+\node[ext] (central) at (15.8,-6) {Central Server};
+\node[ext] (sens) at (15.8,-9) {Slot Sensor};
+\foreach \u in {u10,u05,u14,u19} \draw (admin)--(\u);
+\draw (mgr)--(u16);\draw (att)--(u22);\draw (att)--(u09);
+\draw (fire)--(u10);\draw (sens)--(u09);\draw (central)--(u19);\draw (central)--(u22);
+\foreach \u in {u05,u14,u19,u16} \draw[arr,dashed] (\u)--node[lbl,pos=.65]{include}(u12);
+\begin{scope}[on background layer]\node[draw=muted,dashed,fit=(u10)(u09)(u12),inner sep=5mm,label={[font=\small]above:SPS -- Administration, safety, and operations}] {};\end{scope}
+\end{tikzpicture}}{Administration, safety, and offline operation (UC-05, 09, 10, 12, 14, 16, 19, 22)}{fig:uc-admin}

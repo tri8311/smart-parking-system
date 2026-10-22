@@ -1,0 +1,8 @@
+def perf_p95(n=1000):  # NFR-01: n entry requests on a 1000-slot lot, time each
+    lot = big_lot()
+    times = []
+    for i in range(n):
+        t0 = time.perf_counter()
+        assert lot.enter(f"P-{i}", "car", T0)
+        times.append(time.perf_counter() - t0)
+    return sorted(times)[int(0.95 * n) - 1]

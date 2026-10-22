@@ -1,0 +1,23 @@
+\chapter{Requirements Elicitation}
+\section{Elicitation Techniques Applied}
+The workbook records five sessions using four techniques: interviews, workshops, questionnaires, and observation. They provide requirement sources and explain why features appear in the backlog. The following register summarizes the case-study sessions; dates, participants, and findings are listed in Table~\ref{tab:elicitation}. All five sessions were authored for this case study; no real stakeholders were interviewed.
+\input{generated/elicitation}
+
+Interviews suit routine workflows and infrequent situations such as lost tickets. Workshops help resolve conflicts between service speed, revenue collection, and safety. Questionnaires capture driver expectations; observation adds equipment exceptions and evacuation conditions. Outside the course setting, meeting records, questions, reviewers, and observation conditions should be retained.
+
+EL-03 reports that 65\% of respondents want reservations and 50\% want plate-based vehicle location. The workbook provides neither sample size nor sampling method or original responses. These figures are therefore case-study assumptions and cannot support broader market conclusions. EL-01 expresses a desire for gate processing below ten seconds, whereas NFR-01 measures only the 95th-percentile slot-assignment time. These metrics have different measurement boundaries and are not interchangeable.
+
+\section{Candidate Requirements List}
+\subsection{Normalization and Prioritization}
+Needs are converted into requirements with REQ or NFR identifiers, sources, priorities, statuses, acceptance criteria, and verification methods. The dataset uses three MoSCoW levels: Must, Should, and Could. Must covers core workflows and important controls; Should adds operational capabilities; Could improves experience or commercial policies. No requirement is assigned Won't in this version.
+\input{generated/candidates}
+
+\subsection{Conflicts and Analysis Decisions}
+First, peak-hour pricing may increase revenue while reducing fee predictability. The approach is to record the rate and occupancy multiplier at entry, show a breakdown before payment, and test time boundaries. Second, reservations reduce capacity available to walk-in customers; the model limits the hold to 15 minutes after the expected arrival. Third, the normal requirement to pay before opening the barrier yields to evacuation.
+
+Elicitation sessions currently link directly to 21 of the 31 functional requirements. REQ-22 through REQ-31 have no session link in \texttt{requirements\_derived}, although REQ-24 and REQ-25 can be traced through CR-02. The next management step is to add source records and approvers. Implementing a feature does not itself establish that the underlying need has been validated.
+
+\section{Chapter Conclusion}
+The dataset provides a clear elicitation and prioritization framework but has gaps in survey evidence and the origins of extended features. The candidate list feeds the SRS; individual requirement quality must be assessed separately during specification and verification.
+
+In numbers, five authored sessions using four techniques lead to the 31 candidate requirements prioritized with the MoSCoW levels Must, Should, and Could. Twenty-one of the 31 requirements link directly to a session; REQ-22 through REQ-31 do not, and the next management step is to add source records and approvers for them. The percentages reported by the questionnaire have no stated sample size and therefore cannot support market conclusions. Chapter~3 turns the candidate list into specifications and keeps these gaps visible instead of hiding them.

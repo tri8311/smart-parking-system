@@ -1,0 +1,31 @@
+\chapter{Non-functional Requirements \& Verification}
+\section{ISO/IEC 25010 Classification}
+The course template references ISO/IEC 25010:2011 and its eight product-quality characteristics~\cite{iso25010}. This report retains that edition as the comparison baseline. ISO/IEC 25010:2023 defines a nine-characteristic model~\cite{iso2023}; the terminology of the two editions should not be combined without review.
+\begin{table}[H]\centering\small\caption{NFR mapping and interpretation by standard edition}
+\begin{tabularx}{\linewidth}{L{18mm}L{46mm}X}\toprule
+\textbf{ID} & \textbf{2011 reference category} & \textbf{Interpretation in this report}\\\midrule
+NFR-01 & Performance efficiency & Slot-assignment response time.\\
+NFR-02 & Reliability / availability & Gate-service availability.\\
+NFR-03 & Usability & New attendants' ability to complete a task.\\
+NFR-04 & Security / confidentiality & Protection of identifying and payment data.\\
+NFR-05 & Performance efficiency / capacity & Growth in scale; quantitative workload targets are needed.\\
+NFR-06 & System-level safety requirement & Safety is not treated as one of the eight product-quality characteristics of the 2011 edition.\\\bottomrule
+\end{tabularx}\end{table}
+The code in \texttt{rm.py} prints Safety directly for NFR-06. The dataset snapshot \url{data/dataset.json} retains the source category, while this report distinguishes its interpretation to avoid attributing it incorrectly to the 2011 product model. Adopting the 2023 baseline requires reviewing the entire mapping rather than merely changing the year in a heading.
+
+\needspace{16\baselineskip}\section{Simulation Verification Results}
+\subsection{Measurement Design and Environment}
+\input{generated/environment}
+NFR-01 is measured using 1,000 sequential entry calls on a 1,000-car-slot lot in one process. Each call includes slot search, ticket creation, and in-memory logging. The 95th percentile is the 950th value in the sorted timing sequence. NFR-06 measures evacuation with 500 parked vehicles in a 1,000-slot lot. Neither measurement includes cameras, networking, payment, controllers, or mechanical barrier movement.
+
+NFR-02 uses a 30-day model with random seed 2026, an outage probability of 0.4\% per hour, and outages lasting 5--20 minutes. This is assumption-based analysis, not operational uptime monitoring. Results depend on the assumptions and do not represent measured production reliability.
+\input{generated/nfr-results}
+The timings in Table~\ref{tab:nfr-results} come from a dedicated measurement run. TC-04 and the evacuation test in Table~\ref{tab:tests} measure the same quantities in a separate run, so the numbers differ slightly; both vary with the machine and only the comparison with the target matters.
+
+\subsection{Requirements Not Fully Verified}
+NFR-03 has not been tested with new staff; lost-ticket task time should be measured after 20 minutes of training. NFR-04 has no encryption evidence. NFR-05 lacks a threshold. A proposed extension is to define 1,000 slots, gate count, and concurrent workload before measuring p95 and consistency. This proposal is not approved in the workbook.
+
+\section{Chapter Conclusion}
+Three NFRs have results from simulation timing or assumption-based analysis, which do not establish an end-to-end SLA. Usability, encryption, and scalability require further evidence.
+
+The measured results are the slot-assignment p95 time (NFR-01, target one second), the barrier-opening time during evacuation (NFR-06, target five seconds), and the uptime from an assumed outage model (NFR-02, target 99.5\%). The two timings are far below their targets, but they come from sequential Python calls on one machine, so they show that the logic is cheap, not that a real site meets the target. NFR-03 has no test with new staff, NFR-04 has no encryption, and NFR-05 has no threshold, so none of the three can be accepted yet. The report therefore separates what was measured, what was modeled, and what remains open.
